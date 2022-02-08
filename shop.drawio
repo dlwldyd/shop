@@ -1,1 +1,30 @@
-<mxfile host="app.diagrams.net" modified="2022-02-08T14:47:25.643Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36 Edg/97.0.1072.76" version="16.4.8" etag="_Bz3ekQpcfX7J6muw1ex" type="github"><diagram id="kHEh7FCxtHQ9_woBUVam">UzV2zq1wL0osyPDNT0nNUTV2VTV2LsrPL4GwciucU3NyVI0MMlNUjV1UjYwMgFjVyA2HrCFY1qAgsSg1rwSLBiADYTaQg2Y1AA==</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2022-02-08T15:00:14.186Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36 Edg/97.0.1072.76" etag="3FPcRhhFQ_gWNykrPsQN" version="16.4.8" type="github">
+  <diagram id="kHEh7FCxtHQ9_woBUVam" name="페이지-1">
+    <mxGraphModel dx="1038" dy="579" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="MIABXXXkFtGxlnCeQIk6-1" value="Item" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;" vertex="1" parent="1">
+          <mxGeometry x="51" y="200" width="179" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="MIABXXXkFtGxlnCeQIk6-2" value="- id : Long&#xa;- itemName : String&#xa;- price : int&#xa;- stockQuantity : int&#xa;- status : ItemStatus&#xa;- itemDetail : String&#xa;- registerTime : LocalDateTime&#xa;- updateTime : LocalDateTime" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="MIABXXXkFtGxlnCeQIk6-1">
+          <mxGeometry y="30" width="179" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="MIABXXXkFtGxlnCeQIk6-3" value="Member" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;" vertex="1" parent="1">
+          <mxGeometry x="280" y="220" width="160" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="MIABXXXkFtGxlnCeQIk6-4" value="- id : Long&#xa;- name : String&#xa;- email : String&#xa;- password : String&#xa;- address : Address&#xa;- role : Role" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="MIABXXXkFtGxlnCeQIk6-3">
+          <mxGeometry y="30" width="160" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="MIABXXXkFtGxlnCeQIk6-5" value="Cart" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;" vertex="1" parent="1">
+          <mxGeometry x="500" y="230" width="160" height="120" as="geometry">
+            <mxRectangle x="500" y="230" width="60" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MIABXXXkFtGxlnCeQIk6-6" value="- id : Long&#xa;- member : Member" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;fontStyle=0" vertex="1" parent="MIABXXXkFtGxlnCeQIk6-5">
+          <mxGeometry y="30" width="160" height="90" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
