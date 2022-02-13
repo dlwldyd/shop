@@ -1,7 +1,7 @@
 package com.example.shop.domain.entity;
 
 import com.example.shop.domain.embeddable.Address;
-import com.example.shop.domain.entity.baseentity.DateEntity;
+import com.example.shop.domain.entity.baseentity.DateBaseEntity;
 import com.example.shop.domain.enumtype.Role;
 import lombok.Getter;
 
@@ -9,7 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-public class Member extends DateEntity {
+public class Member extends DateBaseEntity {
 
     @Id
     @GeneratedValue

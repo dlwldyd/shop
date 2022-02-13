@@ -1,6 +1,6 @@
 package com.example.shop.domain.entity;
 
-import com.example.shop.domain.entity.baseentity.DateEntity;
+import com.example.shop.domain.entity.baseentity.DateBaseEntity;
 import com.example.shop.domain.enumtype.ItemStatus;
 import lombok.Getter;
 
@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-public class Item extends DateEntity {
+public class Item extends DateBaseEntity {
 
     @Id
     @GeneratedValue

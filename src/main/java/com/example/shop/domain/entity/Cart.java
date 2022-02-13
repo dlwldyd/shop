@@ -1,13 +1,13 @@
 package com.example.shop.domain.entity;
 
-import com.example.shop.domain.entity.baseentity.DateEntity;
+import com.example.shop.domain.entity.baseentity.DateBaseEntity;
 import lombok.Getter;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-public class Cart extends DateEntity {
+public class Cart extends DateBaseEntity {
 
     @Id
     @GeneratedValue

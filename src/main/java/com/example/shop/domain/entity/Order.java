@@ -1,6 +1,6 @@
 package com.example.shop.domain.entity;
 
-import com.example.shop.domain.entity.baseentity.DateEntity;
+import com.example.shop.domain.entity.baseentity.DateBaseEntity;
 import com.example.shop.domain.enumtype.OrderStatus;
 import lombok.Getter;
 
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "Orders")
 @Getter
-public class Order extends DateEntity {
+public class Order extends DateBaseEntity {
 
     @Id
     @GeneratedValue
