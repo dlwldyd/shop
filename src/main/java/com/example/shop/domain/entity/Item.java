@@ -1,15 +1,14 @@
 package com.example.shop.domain.entity;
 
+import com.example.shop.domain.entity.baseentity.DateEntity;
 import com.example.shop.domain.enumtype.ItemStatus;
 import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
-public class Item {
+public class Item extends DateEntity {
 
     @Id
     @GeneratedValue
@@ -22,13 +21,13 @@ public class Item {
     @Column(nullable = false)
     private int price;
 
-    @Column(name = "stock_number", nullable = false)
-    private int stockNumber;
+    @Column(name = "stock_quantity", nullable = false)
+    private int stockQuantity;
 
     @Enumerated(EnumType.STRING)
     private ItemStatus status;
 
-    private LocalDateTime registerTime;
-
-    private LocalDateTime updateTime;
+    @Lob
+    @Column(nullable = false)
+    private String itemDetail;
 }
