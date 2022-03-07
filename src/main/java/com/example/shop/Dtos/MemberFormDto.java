@@ -19,10 +19,9 @@ public class MemberFormDto {
     @Email
     private String email;
 
-    @Min(value = 8)
+    @NotBlank
     private String password;
 
-    @Min(value = 8)
     private String rePassword;
 
     @NotBlank

@@ -18,7 +18,7 @@
                             <!-- logo -->
                             <div class="site-logo">
                                 <a href="/">
-                                    <img src="assets/img/logo.png" alt="">
+                                    <img src="/assets/img/logo.png" alt="">
                                 </a>
                             </div>
                             <!-- logo -->
@@ -61,8 +61,9 @@
                                     </li>
                                     <li>
                                         <ul>
-                                            <li><a href="#">로그인</a></li>
-                                            <li><a href="/member/registration">회원가입</a></li>
+                                            <li sec:authorize="isAnonymous()"><a href="/member/login">로그인</a></li>
+                                            <li sec:authorize="isAnonymous()"><a href="/member/registration">회원가입</a></li>
+                                            <li sec:authorize="isAuthenticated()"><a href="/member/logout">로그아웃</a></li>
                                             <li>
                                                 <div class="header-icons">
                                                     <a class="shopping-cart" href="cart.html"><i class="fas fa-shopping-cart"></i></a>

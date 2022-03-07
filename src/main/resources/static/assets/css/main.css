@@ -2268,6 +2268,17 @@ ul.social-link-team li a {
   border-radius: 3px;
 }
 
+.fill-black {
+  padding: 150px 0;
+  background-size: cover;
+  background-position: center center;
+  position: relative;
+  z-index: 1;
+  background-attachment: fixed;
+  padding-top: 30px;
+  background-color: darkslategrey;
+}
+
 .contact-form form p input[type=text], .contact-form form p input[type=tel], .contact-form form p input[type=email] {
   width: 49%;
   padding: 15px;
