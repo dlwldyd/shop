@@ -11,6 +11,8 @@ spring:
         enabled: true
       restart:
         enabled: true
+  messages:
+    basename: messages, errors
 
   jpa:
     hibernate:

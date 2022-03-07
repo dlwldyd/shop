@@ -2261,13 +2261,6 @@ ul.social-link-team li a {
   line-height: 1.8;
 }
 
-.login-form form p input[type=password], .login-form form p input[type=text], .login-form form p input[type=tel],.login-form form p input[type=email], .login-form form p input[type=number] {
-  width: 100%;
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 3px;
-}
-
 .fill-black {
   padding: 150px 0;
   background-size: cover;
@@ -2772,4 +2765,11 @@ table.order-details tbody td {
   display: table-cell;
   vertical-align: middle;
   width: 100%;
+}
+
+.login-form form p input[type=password], .login-form form p input[type=text], .login-form form p input[type=tel],.login-form form p input[type=email], .login-form form p input[type=number] {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
 }

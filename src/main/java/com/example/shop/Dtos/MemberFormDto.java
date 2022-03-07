@@ -15,7 +15,7 @@ public class MemberFormDto {
     @NotBlank
     private String name;
 
-    @NotNull
+    @NotBlank
     @Email
     private String email;
 

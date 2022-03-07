@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <title>회원가입</title>
 </head>
+<style>
+.field-error {
+    border-color: #dc3545 !important;
+    color: #dc3545 !important;
+}
+</style>
 <body>
     <div th:replace="~{fragments/navbar :: navbar}"></div>
     <div class="fill-black"></div>
@@ -19,14 +25,49 @@
                         <p>회원정보를 입력해주세요. 모두 입력하셔야 가입이 가능합니다.</p>
                     </div>
                     <div class="login-form">
-                        <form id="fruitkha-contact" th:action="@{/member/registration}" method="post" onSubmit="return valid_datas( this );">
-                            <p><input type="text" placeholder="아이디" name="username" id="username"></p>
-                            <p><input type="text" placeholder="이름" name="name" id="name"></p>
-                            <p><input type="password" placeholder="비밀번호" name="password" id="password"></p>
-                            <p><input type="password" placeholder="비밀번호 확인" name="rePassword" id="rePassword"></p>
-                            <p><input type="email" placeholder="이메일" name="email" id="email"></p>
-                            <p><input type="text" placeholder="주소" name="address" id="address"></p>
-                            <p><input type="text" placeholder="휴대폰, '-'는 빼고 입력해 주세요." maxlength="11" name="phone" id="phone"></p>
+                        <form id="fruitkha-contact" th:object="${member}" th:action="@{/member/registration}" method="post">
+                            <p>
+                                <input type="text" placeholder="아이디" th:errorclass="field-error" th:field="*{username}">
+                                <div class="field-error" th:errors="*{username}">
+                                    아이디 오류
+                                </div>
+                            </p>
+                            <p>
+                                <input type="text" placeholder="이름" th:errorclass="field-error" th:field="*{name}">
+                                <div class="field-error" th:errors="*{name}">
+                                    이름 오류
+                                </div>
+                            </p>
+                            <p>
+                                <input type="password" placeholder="비밀번호" th:errorclass="field-error" th:field="*{password}">
+                                <div class="field-error" th:errors="*{password}">
+                                    비밀번호 오류
+                                </div>
+                            </p>
+                            <p>
+                                <input type="password" placeholder="비밀번호 확인" th:errorclass="field-error" th:field="*{rePassword}">
+                                <div class="field-error" th:errors="*{rePassword}">
+                                    비밀번호 재입력 오류
+                                </div>
+                            </p>
+                            <p>
+                                <input type="email" placeholder="이메일" th:errorclass="field-error" th:field="*{email}">
+                                <div class="field-error" th:errors="*{email}">
+                                    이메일 오류
+                                </div>
+                            </p>
+                            <p>
+                                <input type="text" placeholder="주소" th:errorclass="field-error" th:field="*{address}">
+                                <div class="field-error" th:errors="*{address}">
+                                    주소 오류
+                                </div>
+                            </p>
+                            <p>
+                                <input type="text" placeholder="휴대폰, '-'는 빼고 입력해 주세요." maxlength="11" th:errorclass="field-error" th:field="*{phone}">
+                                <div class="field-error" th:errors="*{phone}">
+                                    휴대폰 번호 오류
+                                </div>
+                            </p>
                             <p><input type="submit" value="가입하기"></p>
                         </form>
                     </div>
