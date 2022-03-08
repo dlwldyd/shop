@@ -20,8 +20,8 @@
                     </div>
                     <div class="login-form">
                         <form id="fruitkha-contact" th:action="@{/member/login}" method="post" onSubmit="return valid_datas( this );">
-                            <p><input type="text" placeholder="아이디" name="username" id="username"></p>
-                            <p><input type="password" placeholder="비밀번호" name="password" id="password"></p>
+                            <p><input type="text" placeholder="아이디" name="username" id="username" required="required"></p>
+                            <p><input type="password" placeholder="비밀번호" name="password" id="password" required="required"></p>
                             <p><input type="submit" value="로그인"></p>
                         </form>
                     </div>
