@@ -1,6 +1,5 @@
 package com.example.shop.domain.entity.baseentity;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
