@@ -26,12 +26,7 @@
                             <!-- menu start -->
                             <nav class="main-menu">
                                 <ul>
-                                    <li class="current-list-item"><a href="#">Home</a>
-                                        <ul class="sub-menu">
-                                            <li><a href="index.html">Static Home</a></li>
-                                            <li><a href="index_2.html">Slider Home</a></li>
-                                        </ul>
-                                    </li>
+                                    <li sec:authorize="hasRole('ADMIN')"><a  href="/item/registration">상품등록</a></li>
                                     <li><a href="about.html">About</a></li>
                                     <li><a href="#">Pages</a>
                                         <ul class="sub-menu">

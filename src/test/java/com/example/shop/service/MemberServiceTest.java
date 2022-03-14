@@ -1,9 +1,8 @@
 package com.example.shop.service;
 
-import com.example.shop.Dtos.MemberFormDto;
+import com.example.shop.Dtos.member.MemberFormDto;
 import com.example.shop.domain.entity.Member;
 import com.example.shop.domain.enumtype.Role;
-import com.example.shop.service.impl.MemberServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +16,7 @@ import static org.assertj.core.api.Assertions.*;
 class MemberServiceTest {
 
     @Autowired
-    MemberServiceImpl memberService;
+    MemberService memberService;
 
     @Autowired
     PasswordEncoder passwordEncoder;

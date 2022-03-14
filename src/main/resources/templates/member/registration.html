@@ -9,15 +9,13 @@
     border-color: #dc3545 !important;
     color: #dc3545 !important;
 }
-.hollow {
-    width: 100%;
-    height: 20px;
+#top {
+    margin-top: 20px;
 }
 </style>
 <body>
     <!-- contact form -->
-    <div class="hollow"></div>
-    <div class="mt-50 mb-50">
+    <div id="top" class="mt-50 mb-50">
         <div class="container">
             <div class="row">
                 <div class="col-lg-3 mb-5 mb-lg-0"></div>
@@ -29,43 +27,43 @@
                     <div class="login-form">
                         <form id="fruitkha-contact" th:object="${member}" th:action="@{/member/registration}" method="post">
                             <p>
-                                <input type="text" placeholder="아이디" th:errorclass="field-error" th:field="*{username}">
+                                <input type="text" placeholder="아이디" th:errorclass="field-error" th:field="*{username}" required>
                                 <div class="field-error" th:errors="*{username}">
                                     아이디 오류
                                 </div>
                             </p>
                             <p>
-                                <input type="text" placeholder="이름" th:errorclass="field-error" th:field="*{name}">
+                                <input type="text" placeholder="이름" th:errorclass="field-error" th:field="*{name}" required>
                                 <div class="field-error" th:errors="*{name}">
                                     이름 오류
                                 </div>
                             </p>
                             <p>
-                                <input type="password" placeholder="비밀번호" th:errorclass="field-error" th:field="*{password}">
+                                <input type="password" placeholder="비밀번호" th:errorclass="field-error" th:field="*{password}" required>
                                 <div class="field-error" th:errors="*{password}">
                                     비밀번호 오류
                                 </div>
                             </p>
                             <p>
-                                <input type="password" placeholder="비밀번호 확인" th:errorclass="field-error" th:field="*{rePassword}">
+                                <input type="password" placeholder="비밀번호 확인" th:errorclass="field-error" th:field="*{rePassword}" required>
                                 <div class="field-error" th:errors="*{rePassword}">
                                     비밀번호 재입력 오류
                                 </div>
                             </p>
                             <p>
-                                <input type="email" placeholder="이메일" th:errorclass="field-error" th:field="*{email}">
+                                <input type="email" placeholder="이메일" th:errorclass="field-error" th:field="*{email}" required>
                                 <div class="field-error" th:errors="*{email}">
                                     이메일 오류
                                 </div>
                             </p>
                             <p>
-                                <input type="text" placeholder="주소" th:errorclass="field-error" th:field="*{address}">
+                                <input type="text" placeholder="주소" th:errorclass="field-error" th:field="*{address}" required>
                                 <div class="field-error" th:errors="*{address}">
                                     주소 오류
                                 </div>
                             </p>
                             <p>
-                                <input type="text" placeholder="휴대폰, '-'는 빼고 입력해 주세요." maxlength="11" th:errorclass="field-error" th:field="*{phone}">
+                                <input type="text" placeholder="휴대폰, '-'는 빼고 입력해 주세요." maxlength="11" th:errorclass="field-error" th:field="*{phone}" required>
                                 <div class="field-error" th:errors="*{phone}">
                                     휴대폰 번호 오류
                                 </div>
@@ -78,7 +76,5 @@
             </div>
         </div>
     </div>
-    <!-- form validation js -->
-    <script src="/assets/js/form-validate.js"></script>
 </body>
 </html>

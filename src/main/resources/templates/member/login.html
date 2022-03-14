@@ -10,10 +10,6 @@
     color: white;
 }
 
-.hollow {
-    height: 10px;
-}
-
 a[type="button"] {
   font-weight: 700;
   text-transform: uppercase;
@@ -22,6 +18,7 @@ a[type="button"] {
   cursor: pointer;
   padding: 15px 25px;
   border-radius: 3px;
+  margin-top: 10px;
 }
 
 a[type="button"] {
@@ -64,9 +61,6 @@ a[type="button"] {
 }
 </style>
 <body>
-<!--    <div th:replace="~{fragments/navbar :: navbar}"></div>-->
-<!--    <div class="fill-black"></div>-->
-
     <!-- contact form -->
     <div class="mt-150 mb-150">
         <div class="container">
@@ -79,15 +73,14 @@ a[type="button"] {
                     </div>
                     <div class="login-form">
                         <form id="fruitkha-contact" th:action="@{/member/login}" method="post">
-                            <p><input type="text" placeholder="아이디" id="username" name="username" required="required"></p>
-                            <p><input type="password" placeholder="비밀번호" id="password" name="password" required="required"></p>
+                            <p><input type="text" placeholder="아이디" id="username" name="username" required></p>
+                            <p><input type="password" placeholder="비밀번호" id="password" name="password" required></p>
                             <p th:if="!${#strings.isEmpty(loginException)}" th:text="${loginException}" class="field-error">
                                 비밀번호 오류
                             </p>
                             <p><input type="submit" value="로그인"></p>
                         </form>
                     </div>
-                    <div class="hollow"></div>
                     <a th:href="@{/member/registration}" type="button">회원가입</a>
                 </div>
                 <div class="col-lg-3 mb-5 mb-lg-0"></div>
@@ -95,7 +88,6 @@ a[type="button"] {
         </div>
     </div>
     <!-- end contact form -->
-    <!-- <div th:replace="~{fragments/footer :: footer}"></div> -->
     <script src="/assets/js/form-validate.js"></script>
 </body>
 </html>

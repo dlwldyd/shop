@@ -13,6 +13,10 @@ spring:
         enabled: true
   messages:
     basename: messages, errors
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 100MB
 
   jpa:
     hibernate:
@@ -24,3 +28,8 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+
+
+itemImgLocation: C:/shop/item
+
+uploadPath: file:///C:/shop
