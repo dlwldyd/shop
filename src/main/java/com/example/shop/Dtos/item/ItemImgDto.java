@@ -1,6 +1,6 @@
 package com.example.shop.Dtos.item;
 
-import com.example.shop.domain.entity.ItemImg;
+import com.example.shop.domain.ItemImg;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +20,7 @@ public class ItemImgDto {
 
     private boolean repImg;
 
-    public static ItemImgDto convertItemImgToDto(ItemImg itemImg) {
+    public static ItemImgDto of(ItemImg itemImg) {
         return new ItemImgDto(itemImg.getId(),
                 itemImg.getImgName(),
                 itemImg.getOriginImgName(),

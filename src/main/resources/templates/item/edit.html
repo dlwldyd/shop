@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title>상품 수정</title>
+</head>
+<style>
+.field-error {
+    border-color: #dc3545 !important;
+    color: #dc3545 !important;
+}
+#top {
+    margin-top: 20px;
+}
+
+.field-error {
+    border-color: #dc3545 !important;
+    color: #dc3545 !important;
+}
+
+.login-form form p select {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+textarea {
+    border: 1px solid #ddd;
+    padding: 15px;
+    height: 200px;
+    border-radius: 3px;
+    width: 100%;
+    resize: none;
+}
+
+.filebox .upload-name {
+    display: inline-block;
+    height: 40px;
+    padding: 0 10px;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+    width: 78%;
+    color: #999999;
+}
+
+.filebox label {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #fff;
+    vertical-align: top;
+    background-color: #025f19;
+    cursor: pointer;
+    height: 40px;
+    margin-left: 10px;
+    border-radius: 3px;
+}
+
+.filebox input[type="file"] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+}
+#register-button {
+    margin-bottom: 20px;
+}
+</style>
+<body>
+<!-- contact form -->
+<div id="top" class="mt-50 mb-50">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 mb-5 mb-lg-0"></div>
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <div class="form-title">
+                    <h2>상품수정</h2>
+                </div>
+                <div class="login-form">
+                    <form id="fruitkha-contact" enctype="multipart/form-data" th:object="${itemFormDto}" th:action="@{/item/edit}" method="post">
+                        <p><input type="hidden" th:field="*{id}"></p>
+                        <p th:if="${#fields.hasGlobalErrors()}">
+                        <div th:each="err : ${#fields.globalErrors()}" class="field-error" th:text="${err}">
+                            상품 수정 오류
+                        </div>
+                        </p>
+                        <p>
+                            <select th:errorclass="field-error" th:field="*{status}">
+                                <option value="SELL">판매 중</option>
+                                <option value="SOLD_OUT">품절</option>
+                            </select>
+                        <div class="field-error" th:errors="*{status}">
+                            상태 오류
+                        </div>
+                        </p>
+                        <p>
+                            <input type="text" placeholder="상품명" th:errorclass="field-error" th:field="*{itemName}">
+                        <div class="field-error" th:errors="*{itemName}">
+                            이름 오류
+                        </div>
+                        </p>
+                        <p>
+                            <input type="number" placeholder="가격" th:errorclass="field-error" th:field="*{price}">
+                        <div class="field-error" th:errors="*{price}">
+                            가격 오류
+                        </div>
+                        </p>
+                        <p>
+                            <input type="number" placeholder="재고량" th:errorclass="field-error" th:field="*{stockQuantity}">
+                        <div class="field-error" th:errors="*{stockQuantity}">
+                            재고량 오류
+                        </div>
+                        </p>
+                        <p>
+                            <textarea placeholder="상품 상세 설명" th:errorclass="field-error" th:field="*{itemDetails}">
+                                상품 상세 설명
+                            </textarea>
+                        <div class="field-error" th:errors="*{itemDetails}">
+                            상품 상세 설명 오류
+                        </div>
+                        </p>
+                        <p class="filebox" th:each="itemImgDto : *{itemImgDtoList}" th:if="${itemImgDto.repImg} == false">
+                            <input th:field="${itemImgDto.originImgName}" class="upload-name" disabled>
+                            <label th:for="itemRepImg">파일찾기</label>
+                            <input type="file" th:field="*{itemRepImg}" onchange="javascript:document.getElementById('RepImgName').value = this.value">
+                        <div class="field-error" th:errors="*{itemRepImg}">
+                            파일 오류
+                        </div>
+                        </p>
+<!--                        <p class="filebox">-->
+<!--                            <input id="RepImgName" name="RepImgName" class="upload-name" disabled placeholder="상품 대표 이미지">-->
+<!--                            <label th:for="itemRepImg">파일찾기</label>-->
+<!--                            <input type="file" th:field="*{itemRepImg}" onchange="javascript:document.getElementById('RepImgName').value = this.value">-->
+<!--                        <div class="field-error" th:errors="*{itemRepImg}">-->
+<!--                            파일 오류-->
+<!--                        </div>-->
+<!--                        </p>-->
+<!--                        <p class="filebox">-->
+<!--                            <input id="ImgName" name="itemImgs" class="upload-name" disabled placeholder="상품 이미지">-->
+<!--                            <label th:for="itemImgs">파일찾기</label>-->
+<!--                            <input type="file" th:field="*{itemImgs}" multiple>-->
+<!--                        <div class="field-error" th:errors="*{itemImgs}">-->
+<!--                            파일 오류-->
+<!--                        </div>-->
+<!--                        </p>-->
+                        <p><input id="register-button" type="submit" value="수정"></p>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-3 mb-5 mb-lg-0"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

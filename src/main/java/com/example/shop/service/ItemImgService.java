@@ -1,7 +1,7 @@
 package com.example.shop.service;
 
-import com.example.shop.domain.entity.ItemImg;
-import com.example.shop.repository.ItemImgRepository;
+import com.example.shop.domain.ItemImg;
+import com.example.shop.repository.itemimg.ItemImgRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +28,14 @@ public class ItemImgService {
         String imgFullPathName = itemImgLocation + "/" + itemImg.getImgName();
         itemImgRepository.save(itemImg);
         fileService.uploadFile(imgFullPathName, itemImgFile);
+    }
+
+    public ItemImg getItemRepImg(Long itemId) {
+        return itemImgRepository.findItemRepImg(itemId);
+    }
+
+    public List<ItemImg> getItemImgList(Long itemId) {
+        return itemImgRepository.findItemImg(itemId);
     }
 
 }

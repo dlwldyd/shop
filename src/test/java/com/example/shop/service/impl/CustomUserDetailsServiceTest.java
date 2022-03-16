@@ -1,8 +1,8 @@
 package com.example.shop.service.impl;
 
-import com.example.shop.domain.entity.Member;
-import com.example.shop.domain.enumtype.Role;
-import com.example.shop.repository.MemberRepository;
+import com.example.shop.domain.Member;
+import com.example.shop.enumtype.Role;
+import com.example.shop.repository.member.MemberRepository;
 import com.example.shop.security.member.MemberContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

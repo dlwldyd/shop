@@ -32,4 +32,4 @@ logging:
 
 itemImgLocation: C:/shop/item
 
-uploadPath: file:///C:/shop
+uploadPath: file:///C:/shop/item/

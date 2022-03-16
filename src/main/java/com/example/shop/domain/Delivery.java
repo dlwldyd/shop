@@ -1,7 +1,7 @@
-package com.example.shop.domain.entity;
+package com.example.shop.domain;
 
-import com.example.shop.domain.entity.baseentity.DateBaseEntity;
-import com.example.shop.domain.enumtype.DeliveryStatus;
+import com.example.shop.domain.baseentity.DateBaseEntity;
+import com.example.shop.enumtype.DeliveryStatus;
 import lombok.Getter;
 
 import javax.persistence.*;

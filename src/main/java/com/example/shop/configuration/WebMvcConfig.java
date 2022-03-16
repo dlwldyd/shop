@@ -12,10 +12,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
     String uploadPath;
 
     //정적 리소스 설정
-    // "/item/images/**" 로 요청되는 모든 url 이 uploadPath 에 있는 정적 리소스로 매핑됨
+    // "/images/**" 로 요청되는 모든 url 이 uploadPath 에 있는 정적 리소스로 매핑됨
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/item/images/**")
+        registry.addResourceHandler("/images/**")
                 .addResourceLocations(uploadPath);
     }
 }

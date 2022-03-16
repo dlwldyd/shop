@@ -1,4 +1,4 @@
-package com.example.shop.domain.enumtype;
+package com.example.shop.enumtype;
 
 public enum OrderStatus {
     ORDER, CANCEL

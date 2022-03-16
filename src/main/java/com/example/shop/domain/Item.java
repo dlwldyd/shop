@@ -1,12 +1,15 @@
-package com.example.shop.domain.entity;
+package com.example.shop.domain;
 
-import com.example.shop.domain.entity.baseentity.DateBaseEntity;
-import com.example.shop.domain.enumtype.ItemStatus;
+import com.example.shop.domain.baseentity.DateBaseEntity;
+import com.example.shop.enumtype.ItemCategory;
+import com.example.shop.enumtype.ItemStatus;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -30,15 +33,22 @@ public class Item extends DateBaseEntity {
     @Enumerated(EnumType.STRING)
     private ItemStatus status;
 
+    @Enumerated(EnumType.STRING)
+    private ItemCategory category;
+
     @Lob
     @Column(nullable = false)
     private String itemDetail;
 
-    public Item(String itemName, int price, int stockQuantity, ItemStatus status, String itemDetail) {
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<ItemImg> itemImgList = new ArrayList<>();
+
+    public Item(String itemName, int price, int stockQuantity, ItemStatus status, ItemCategory category, String itemDetail) {
         this.itemName = itemName;
         this.price = price;
         this.stockQuantity = stockQuantity;
         this.status = status;
         this.itemDetail = itemDetail;
+        this.category = category;
     }
 }

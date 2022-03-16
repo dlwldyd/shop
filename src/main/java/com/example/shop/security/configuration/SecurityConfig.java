@@ -30,7 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().requestMatchers(request -> request.getRequestURI().startsWith("/assets"));
+        web.ignoring().requestMatchers(request ->
+                request.getRequestURI().startsWith("/assets") || request.getRequestURI().startsWith("/images"));
     }
 
     @Override
@@ -43,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers("/", "/member/registration", "/member/login*").permitAll()
+                .antMatchers("/item/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
 
         http.formLogin()

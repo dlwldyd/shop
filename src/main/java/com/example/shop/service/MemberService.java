@@ -1,7 +1,7 @@
 package com.example.shop.service;
 
-import com.example.shop.domain.entity.Member;
-import com.example.shop.repository.MemberRepository;
+import com.example.shop.domain.Member;
+import com.example.shop.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

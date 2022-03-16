@@ -1,6 +1,6 @@
 package com.example.shop.security.member;
 
-import com.example.shop.domain.entity.Member;
+import com.example.shop.domain.Member;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;

@@ -1,4 +1,4 @@
-package com.example.shop.domain.entity.baseentity;
+package com.example.shop.domain.baseentity;
 
 import lombok.Getter;
 import lombok.Setter;

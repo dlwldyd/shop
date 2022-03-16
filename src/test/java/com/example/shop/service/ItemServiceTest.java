@@ -1,10 +1,11 @@
 package com.example.shop.service;
 
 import com.example.shop.Dtos.item.ItemFormDto;
-import com.example.shop.domain.entity.Item;
-import com.example.shop.domain.entity.ItemImg;
-import com.example.shop.domain.enumtype.ItemStatus;
-import com.example.shop.repository.ItemRepository;
+import com.example.shop.domain.Item;
+import com.example.shop.domain.ItemImg;
+import com.example.shop.enumtype.ItemCategory;
+import com.example.shop.enumtype.ItemStatus;
+import com.example.shop.repository.item.ItemRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,7 +39,8 @@ class ItemServiceTest {
         Integer stockQuantity = 100;
         String itemDetails = "아이템";
         ItemStatus status = ItemStatus.SELL;
-        ItemFormDto itemFormDto = new ItemFormDto(null, itemName, price, itemDetails, stockQuantity, status);
+        ItemCategory itemCategory = ItemCategory.LAPTOP;
+        ItemFormDto itemFormDto = new ItemFormDto(itemName, price, itemDetails, stockQuantity, status, itemCategory);
         String fileName = "test";
         String contentType = "jpg";
         String path = "C:/shop/item/tikaTestFile.jpg";

@@ -1,8 +1,8 @@
 package com.example.shop.service;
 
 import com.example.shop.Dtos.member.MemberFormDto;
-import com.example.shop.domain.entity.Member;
-import com.example.shop.domain.enumtype.Role;
+import com.example.shop.domain.Member;
+import com.example.shop.enumtype.Role;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

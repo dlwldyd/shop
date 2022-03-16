@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title>상품 관리</title>
+</head>
+<style>
+.fill-black-section {
+    padding: 50px 0;
+    background-size: cover;
+    background-position: center center;
+    position: relative;
+    z-index: 1;
+    background-attachment: fixed;
+    padding-top: 50px;
+}
+.fill-black {
+    background-image: url(/assets/img/fill-black.jpg);
+}
+.item-bg {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    background-color: #ddd;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.read-more-btn {
+    margin-right: 20px;
+}
+.search-form form p input[type=text], .search-form form p input[type=tel], .search-form form p input[type=email] {
+    width: 49%;
+    height: 40px;
+    padding: 5px;
+    border: 1px solid rgb(180, 180, 180);
+    border-radius: 3px;
+}
+.search-form form p select {
+    margin-right: 5px;
+    width: 20%;
+    height: 40px;
+    border: 1px solid rgb(180, 180, 180);
+    border-radius: 3px;
+}
+button {
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border: 1px solid rgb(180, 180, 180);
+    border-radius: 3px;
+}
+</style>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div class="fill-black-section fill-black"></div>
+<!-- latest news -->
+<div class="latest-news mt-150 mb-150">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-6" th:each="item : ${items.getContent()}">
+                <div class="single-latest-news">
+                    <div><img th:src="@{${item.itemRepImgDto.imgUrl}}" class="item-bg"/></div>
+                    <div class="news-text-box">
+                        <h3><div th:text="${item.itemName}">상품 이름</div></h3>
+                        <p class="blog-meta">
+                            <span class="date" th:text="|상태 : ${item.status.description}|">판매 중</span>
+                            <span class="author" th:text="|카테고리 : ${item.category.description}|">1</span>
+                        </p>
+                        <p class="excerpt" th:text="|상품 가격 : ${item.price}원|">10000원</p>
+                        <p class="excerpt" th:text="|재고량 : ${item.stockQuantity}|">1</p>
+                        <p class="excerpt" th:text="|상품 등록일 : ${#temporals.format(item.createdDate, 'yyyy-MM-dd HH:mm:ss')}|">상품 등록일</p>
+                        <p class="excerpt" th:text="|상품 수정일 : ${#temporals.format(item.lastModifiedDate, 'yyyy-MM-dd HH:mm:ss')}|">상품 수정일</p>
+                        <a href="#" class="read-more-btn">수정 <i class="fas fa-angle-right"></i></a>
+                        <a href="#" class="read-more-btn">삭제 <i class="fas fa-angle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-8 search-form">
+                <form id="fruitkha-contact" th:object="${itemSearchDto}">
+                    <p>
+                        <select th:field="*{itemStatus}">
+                            <option value="">전체</option>
+                            <option value="SELL">판매 중</option>
+                            <option value="SOLD_OUT">품절</option>
+                        </select>
+                        <select th:field="*{itemCategory}">
+                            <option value="">전체</option>
+                            <option value="LAPTOP">노트북</option>
+                            <option value="PC">PC</option>
+                            <option value="PERIPHERALS">주변장치</option>
+                            <option value="MONITOR">모니터</option>
+                            <option value="KEYBOARD">키보드</option>
+                            <option value="MOUSE">마우스</option>
+                        </select>
+                        <input type="text" placeholder="상품명 검색" th:field="*{itemName}">
+                        <button type="submit"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+            <div class="col-lg-2"></div>
+        </div>
+
+        <div class="row">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 text-center" th:with="start = ${(items.number / maxPage) * maxPage + 1}, end = ${items.totalPages - start >= maxPage - 1 ? start + maxPage -1 : (items.totalPages == 0 ? 1 : items.totalPages)}">
+                        <div class="pagination-wrap">
+                            <ul>
+                                <li th:if="${items.number} ge 5"><a th:onclick="'javascript:page(' + ${start + maxPage - 7} + ')'">Prev</a></li>
+                                <li th:each="page: ${#numbers.sequence(start, end)}"><a th:classappend="${items.number eq page - 1} ? 'active' : _" th:onclick="'javascript:page(' + ${page - 1} + ')'">[[${page}]]</a></li>
+                                <li th:if="${items.number + 1} le ${((items.totalPages - 1) / maxPage) * maxPage}"><a th:onclick="'javascript:page(' + ${start + 4} + ')'">Next</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end latest news -->
+<script>
+    function page(page){
+        const itemStatus = document.getElementById("itemStatus").value;
+        const itemCategory = document.getElementById("itemCategory").value;
+        const itemName = document.getElementById("itemName").value;
+
+        location.href = "/item/manage/?page=" + page + "&itemStatus=" + itemStatus + "&itemCategory=" + itemCategory + "&itemName=" + itemName;
+    }
+</script>
+<!-- jquery -->
+<script src="/assets/js/jquery-1.11.3.min.js"></script>
+<!-- bootstrap -->
+<script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+<!-- count down -->
+<script src="/assets/js/jquery.countdown.js"></script>
+<!-- isotope -->
+<script src="/assets/js/jquery.isotope-3.0.6.min.js"></script>
+<!-- waypoints -->
+<script src="/assets/js/waypoints.js"></script>
+<!-- owl carousel -->
+<script src="/assets/js/owl.carousel.min.js"></script>
+<!-- magnific popup -->
+<script src="/assets/js/jquery.magnific-popup.min.js"></script>
+<!-- mean menu -->
+<script src="/assets/js/jquery.meanmenu.min.js"></script>
+<!-- sticker js -->
+<script src="/assets/js/sticker.js"></script>
+<!-- main js -->
+<script src="/assets/js/main.js"></script>
+</body>
+</html>

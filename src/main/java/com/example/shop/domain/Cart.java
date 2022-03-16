@@ -1,6 +1,6 @@
-package com.example.shop.domain.entity;
+package com.example.shop.domain;
 
-import com.example.shop.domain.entity.baseentity.DateBaseEntity;
+import com.example.shop.domain.baseentity.DateBaseEntity;
 import lombok.Getter;
 
 import javax.persistence.*;

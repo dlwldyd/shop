@@ -1,8 +1,8 @@
-package com.example.shop.domain.entity;
+package com.example.shop.domain;
 
 import com.example.shop.Dtos.member.MemberFormDto;
-import com.example.shop.domain.entity.baseentity.DateBaseEntity;
-import com.example.shop.domain.enumtype.Role;
+import com.example.shop.domain.baseentity.DateBaseEntity;
+import com.example.shop.enumtype.Role;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

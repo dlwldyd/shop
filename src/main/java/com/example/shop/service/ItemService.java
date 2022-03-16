@@ -1,15 +1,23 @@
 package com.example.shop.service;
 
 import com.example.shop.Dtos.item.ItemFormDto;
-import com.example.shop.domain.entity.Item;
-import com.example.shop.domain.entity.ItemImg;
-import com.example.shop.repository.ItemRepository;
+import com.example.shop.Dtos.item.ItemImgDto;
+import com.example.shop.Dtos.item.ItemSearchDto;
+import com.example.shop.domain.Item;
+import com.example.shop.domain.ItemImg;
+import com.example.shop.repository.item.ItemRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -28,22 +36,50 @@ public class ItemService {
         MultipartFile itemRepImgFile = itemFormDto.getItemRepImg();
         String originImgName = itemRepImgFile.getOriginalFilename();
         String imgName = createStoreFileName(originImgName);
-        String imgUrl = "/images/item/" + imgName;
+        String imgUrl = "/images/" + imgName;
 
         ItemImg itemRepImg = new ItemImg(imgName, originImgName, imgUrl, true, savedItem);
 
         itemImgService.saveItemImg(itemRepImg, itemRepImgFile);
 
         for (MultipartFile itemImgFile : itemFormDto.getItemImgs()) {
-            String oriImgName = itemImgFile.getOriginalFilename();
-            String imageName = createStoreFileName(oriImgName);
-            String imageUrl = "/images/item/" + imageName;
+            if (!itemImgFile.isEmpty()) {
+                String oriImgName = itemImgFile.getOriginalFilename();
+                String imageName = createStoreFileName(oriImgName);
+                String imageUrl = "/images/" + imageName;
 
-            ItemImg itemImg = new ItemImg(imageName, oriImgName, imageUrl, false, savedItem);
+                ItemImg itemImg = new ItemImg(imageName, oriImgName, imageUrl, false, savedItem);
 
-            itemImgService.saveItemImg(itemImg, itemImgFile);
+                itemImgService.saveItemImg(itemImg, itemImgFile);
+            }
         }
         return savedItem;
+    }
+
+    public Page<ItemFormDto> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+        return itemRepository.getAdminItemPage(itemSearchDto, pageable);
+    }
+
+    public ItemFormDto getItemData(Long itemId) {
+        ItemImg itemRepImg = itemImgService.getItemRepImg(itemId);
+        List<ItemImg> itemImgList = itemImgService.getItemImgList(itemId);
+
+        List<ItemImgDto> itemImgDtoList = new ArrayList<>();
+
+        itemImgDtoList.add(ItemImgDto.of(itemRepImg));
+        for (ItemImg itemImg : itemImgList) {
+            ItemImgDto itemImgDto = ItemImgDto.of(itemImg);
+            itemImgDtoList.add(itemImgDto);
+        }
+
+        Optional<Item> findItem = itemRepository.findById(itemId);
+        if (!findItem.isEmpty()) {
+            ItemFormDto itemFormDto = ItemFormDto.of(findItem.get());
+            itemFormDto.setItemImgDtoList(itemImgDtoList);
+            return itemFormDto;
+        }else{
+            throw new EntityNotFoundException();
+        }
     }
 
     /**

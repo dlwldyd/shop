@@ -1,7 +1,7 @@
 package com.example.shop.init;
 
-import com.example.shop.domain.entity.Member;
-import com.example.shop.domain.enumtype.Role;
+import com.example.shop.domain.Member;
+import com.example.shop.enumtype.Role;
 import com.example.shop.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
