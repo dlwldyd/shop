@@ -79,7 +79,7 @@ textarea {
                     <h2>상품수정</h2>
                 </div>
                 <div class="login-form">
-                    <form id="fruitkha-contact" enctype="multipart/form-data" th:object="${itemFormDto}" th:action="@{/item/edit}" method="post">
+                    <form id="fruitkha-contact" enctype="multipart/form-data" th:object="${itemFormDto}" th:action="@{/item/edit/{id}(id = *{id})}" method="post">
                         <p><input type="hidden" th:field="*{id}"></p>
                         <p th:if="${#fields.hasGlobalErrors()}">
                         <div th:each="err : ${#fields.globalErrors()}" class="field-error" th:text="${err}">

@@ -58,8 +58,48 @@ public class ItemService {
 
     @Transactional
     public void deleteItem(Long itemId) {
-        itemImgService.deleteItemImg(itemId);
+        itemImgService.deleteAllItemImg(itemId);
         itemRepository.deleteById(itemId);
+    }
+
+    @Transactional
+    public Item updateItem(ItemFormDto itemFormDto) throws IOException {
+
+        Optional<Item> item = itemRepository.findById(itemFormDto.getId());
+
+        if (item.isPresent()) {
+
+            if (!itemFormDto.getItemRepImg().isEmpty()) {
+
+                MultipartFile itemRepImgFile = itemFormDto.getItemRepImg();
+                String originImgName = itemRepImgFile.getOriginalFilename();
+                String imgName = createStoreFileName(originImgName);
+                String imgUrl = "/images/" + imgName;
+
+                ItemImg itemImg = new ItemImg(imgName, originImgName, imgUrl, true, item.get());
+                itemImgService.updateItemRepImg(itemImg, itemFormDto.getItemRepImg());
+            }
+            if (itemFormDto.getItemImgs().size() != 1 || !itemFormDto.getItemImgs().get(0).isEmpty()) {
+
+                itemImgService.deleteNonItemRepImg(itemFormDto.getId());
+                for (MultipartFile itemImgFile : itemFormDto.getItemImgs()) {
+
+                    String originImgName = itemImgFile.getOriginalFilename();
+                    String imgName = createStoreFileName(originImgName);
+                    String imgUrl = "/images/" + imgName;
+
+                    ItemImg itemImg = new ItemImg(imgName, originImgName, imgUrl, false, item.get());
+
+                    itemImgService.saveItemImg(itemImg, itemImgFile);
+                }
+            }
+
+            item.get().updateItem(itemFormDto);
+
+            return item.get();
+        }
+
+        throw new EntityNotFoundException();
     }
 
     public Page<ItemFormDto> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {

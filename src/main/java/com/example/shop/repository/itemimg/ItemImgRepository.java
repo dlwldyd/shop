@@ -19,7 +19,15 @@ public interface ItemImgRepository extends JpaRepository<ItemImg, Long> {
     @Query("select im from ItemImg im where im.item.id = :itemId")
     List<ItemImg> findItemImgByItemId(@Param("itemId") Long itemId);
 
-    @Modifying(clearAutomatically = true)
+    @Modifying
+    @Query("delete from ItemImg im where im.repImg = true and im.item.id = :itemId")
+    void deleteItemRepImgByItemId(@Param("itemId") Long itemId);
+
+    @Modifying
+    @Query("delete from ItemImg im where im.repImg = false and im.item.id = :itemId")
+    void deleteNonItemImgByItemId(@Param("itemId") Long itemId);
+
+    @Modifying
     @Query("delete from ItemImg im where im.item.id = :itemId")
     void deleteItemImgByItemId(@Param("itemId") Long itemId);
 }

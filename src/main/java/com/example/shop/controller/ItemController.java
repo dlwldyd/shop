@@ -2,6 +2,7 @@ package com.example.shop.controller;
 
 import com.example.shop.Dtos.item.ItemFormDto;
 import com.example.shop.Dtos.item.ItemSearchDto;
+import com.example.shop.domain.Item;
 import com.example.shop.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.apache.tika.Tika;
@@ -19,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/item")
@@ -93,11 +95,42 @@ public class ItemController {
         return "item/edit";
     }
 
-//    @PostMapping("/edit/{itemId}")
-//    public String itemEdit(@PathVariable Long itemId,
-//                           @Validated @ModelAttribute ItemFormDto itemFormDto) {
-//
-//    }
+    @PostMapping("/edit/{itemId}")
+    public String itemEdit(@PathVariable Long itemId,
+                           @Validated @ModelAttribute ItemFormDto itemFormDto,
+                           BindingResult bindingResult) throws IOException {
+
+        Tika tika = new Tika();
+
+        if (!itemFormDto.getItemRepImg().isEmpty() && !tika.detect(itemFormDto.getItemRepImg().getInputStream()).startsWith("image")) {
+            bindingResult.rejectValue("itemRepImg", "extensionNotMatch");
+        }
+
+        for (MultipartFile itemImg : itemFormDto.getItemImgs()) {
+            if (!itemImg.isEmpty()) {
+                if (!tika.detect(itemImg.getInputStream()).startsWith("image")) {
+                    bindingResult.rejectValue("itemImgs", "extensionNotMatch");
+                    break;
+                }
+            }
+        }
+
+        if (itemFormDto.getItemImgs().size() > 5) {
+            bindingResult.rejectValue("itemImgs", "fileExceed");
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "item/edit/" + itemFormDto.getId().toString();
+        }
+
+        try {
+            itemService.updateItem(itemFormDto);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        return "redirect:/item/manage";
+    }
 
     @GetMapping("/delete/{itemId}")
     public String deleteItem(@PathVariable Long itemId) {

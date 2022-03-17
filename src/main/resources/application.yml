@@ -27,7 +27,6 @@ spring:
 logging:
   level:
     org.hibernate.SQL: debug
-    org.hibernate.type: trace
 
 
 itemImgLocation: C:/shop/item

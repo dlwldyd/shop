@@ -1,5 +1,6 @@
 package com.example.shop.domain;
 
+import com.example.shop.Dtos.item.ItemFormDto;
 import com.example.shop.domain.baseentity.DateBaseEntity;
 import com.example.shop.enumtype.ItemCategory;
 import com.example.shop.enumtype.ItemStatus;
@@ -8,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,5 +52,20 @@ public class Item extends DateBaseEntity {
         this.status = status;
         this.itemDetail = itemDetail;
         this.category = category;
+    }
+
+    public void updateItem(ItemFormDto itemFormDto) {
+        this.itemName = itemFormDto.getItemName();
+        this.price = itemFormDto.getPrice();
+        this.stockQuantity = itemFormDto.getStockQuantity();
+        this.status = itemFormDto.getStatus();
+        this.category = itemFormDto.getCategory();
+        this.itemDetail = itemFormDto.getItemDetails();
+//        if (!itemFormDto.getItemRepImg().isEmpty()) {
+//            this.itemImgList.removeIf(ItemImg::isRepImg);
+//        }
+//        if (itemFormDto.getItemImgs().size() != 1 || !itemFormDto.getItemImgs().get(0).isEmpty()) {
+//            this.itemImgList.removeIf(itemImg -> !itemImg.isRepImg());
+//        }
     }
 }

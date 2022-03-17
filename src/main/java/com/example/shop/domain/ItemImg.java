@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -35,11 +36,5 @@ public class ItemImg extends DateBaseEntity {
         this.imgUrl = imgUrl;
         this.repImg = repImg;
         this.item = item;
-    }
-
-    public void updateItemImg(String originImgName, String imgName, String imgUrl) {
-        this.originImgName = originImgName;
-        this.imgName = imgName;
-        this.imgUrl = imgUrl;
     }
 }
