@@ -6,13 +6,12 @@ import com.example.shop.enumtype.ItemCategory;
 import com.example.shop.enumtype.ItemStatus;
 import com.example.shop.repository.item.ItemRepository;
 import com.example.shop.repository.itemimg.ItemImgRepository;
-import com.example.shop.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class initItem {
 

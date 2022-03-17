@@ -2,6 +2,7 @@ package com.example.shop.service;
 
 import com.example.shop.MakeMockMultipartFile;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.File;
@@ -23,5 +24,12 @@ class FileServiceTest {
         MockMultipartFile mockMultipartFile = getMockMultipartFile(fileName, contentType, path);
 
         fileService.uploadFile("C:/shop/item/" + newFileName + ".jpg", mockMultipartFile);
+    }
+
+    @Test
+    void deleteFileTest() {
+        String deleteFile = "C:/shop/item/deleteFile.jpg";
+        FileService fileService = new FileService();
+        fileService.deleteFile(deleteFile);
     }
 }

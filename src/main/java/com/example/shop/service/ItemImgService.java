@@ -30,12 +30,18 @@ public class ItemImgService {
         fileService.uploadFile(imgFullPathName, itemImgFile);
     }
 
+    @Transactional
+    public void deleteItemImg(Long itemId) {
+        List<ItemImg> findItemImg = itemImgRepository.findItemImgByItemId(itemId);
+        findItemImg.forEach(itemImg -> fileService.deleteFile(itemImgLocation + "/" + itemImg.getImgName()));
+        itemImgRepository.deleteItemImgByItemId(itemId);
+    }
+
     public ItemImg getItemRepImg(Long itemId) {
-        return itemImgRepository.findItemRepImg(itemId);
+        return itemImgRepository.findItemRepImgByItemId(itemId);
     }
 
     public List<ItemImg> getItemImgList(Long itemId) {
-        return itemImgRepository.findItemImg(itemId);
+        return itemImgRepository.findNonItemRepImgByItemId(itemId);
     }
-
 }

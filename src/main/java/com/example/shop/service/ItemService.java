@@ -56,25 +56,33 @@ public class ItemService {
         return savedItem;
     }
 
+    @Transactional
+    public void deleteItem(Long itemId) {
+        itemImgService.deleteItemImg(itemId);
+        itemRepository.deleteById(itemId);
+    }
+
     public Page<ItemFormDto> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
         return itemRepository.getAdminItemPage(itemSearchDto, pageable);
     }
 
     public ItemFormDto getItemData(Long itemId) {
-        ItemImg itemRepImg = itemImgService.getItemRepImg(itemId);
-        List<ItemImg> itemImgList = itemImgService.getItemImgList(itemId);
-
-        List<ItemImgDto> itemImgDtoList = new ArrayList<>();
-
-        itemImgDtoList.add(ItemImgDto.of(itemRepImg));
-        for (ItemImg itemImg : itemImgList) {
-            ItemImgDto itemImgDto = ItemImgDto.of(itemImg);
-            itemImgDtoList.add(itemImgDto);
-        }
 
         Optional<Item> findItem = itemRepository.findById(itemId);
-        if (!findItem.isEmpty()) {
+
+        if (findItem.isPresent()) {
+            ItemImg itemRepImg = itemImgService.getItemRepImg(itemId);
+            List<ItemImg> itemImgList = itemImgService.getItemImgList(itemId);
+
+            List<ItemImgDto> itemImgDtoList = new ArrayList<>();
+
+            for (ItemImg itemImg : itemImgList) {
+                ItemImgDto itemImgDto = ItemImgDto.of(itemImg);
+                itemImgDtoList.add(itemImgDto);
+            }
+
             ItemFormDto itemFormDto = ItemFormDto.of(findItem.get());
+            itemFormDto.setItemRepImgDto(ItemImgDto.of(itemRepImg));
             itemFormDto.setItemImgDtoList(itemImgDtoList);
             return itemFormDto;
         }else{

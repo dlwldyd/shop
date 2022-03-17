@@ -2,13 +2,9 @@ package com.example.shop.controller;
 
 import com.example.shop.Dtos.item.ItemFormDto;
 import com.example.shop.Dtos.item.ItemSearchDto;
-import com.example.shop.domain.Item;
-import com.example.shop.service.ItemImgService;
 import com.example.shop.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.apache.tika.Tika;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -87,7 +83,7 @@ public class ItemController {
     }
 
     @GetMapping("/edit/{itemId}")
-    public String itemEdit(@PathVariable Long itemId, Model model) {
+    public String itemEditPage(@PathVariable Long itemId, Model model) {
         try {
             ItemFormDto itemFormDto = itemService.getItemData(itemId);
             model.addAttribute("itemFormDto", itemFormDto);
@@ -95,5 +91,17 @@ public class ItemController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         return "item/edit";
+    }
+
+//    @PostMapping("/edit/{itemId}")
+//    public String itemEdit(@PathVariable Long itemId,
+//                           @Validated @ModelAttribute ItemFormDto itemFormDto) {
+//
+//    }
+
+    @GetMapping("/delete/{itemId}")
+    public String deleteItem(@PathVariable Long itemId) {
+        itemService.deleteItem(itemId);
+        return "redirect:/item/manage";
     }
 }
