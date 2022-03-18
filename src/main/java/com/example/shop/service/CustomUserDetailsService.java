@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,15 +24,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Member findMember = memberRepository.findByUsername(username);
+        Optional<Member> findMember = memberRepository.findByUsername(username);
 
-        if (findMember == null) {
+        if (findMember.isEmpty()) {
             throw new UsernameNotFoundException("UsernameNotFoundException");
         }
 
         List<GrantedAuthority> roles = new ArrayList<>();
-        roles.add(new SimpleGrantedAuthority(findMember.getRole().getDescription()));
+        roles.add(new SimpleGrantedAuthority(findMember.get().getRole().getDescription()));
 
-        return new MemberContext(findMember, roles);
+        return new MemberContext(findMember.get(), roles);
     }
 }

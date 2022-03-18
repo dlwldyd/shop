@@ -106,6 +106,34 @@ public class ItemService {
         return itemRepository.getAdminItemPage(itemSearchDto, pageable);
     }
 
+    public Page<ItemFormDto> getItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+        return itemRepository.getItemPage(itemSearchDto, pageable);
+    }
+
+    public ItemFormDto getAdminItemData(Long itemId) {
+
+        Optional<Item> findItem = itemRepository.findById(itemId);
+
+        if (findItem.isPresent()) {
+            ItemImg itemRepImg = itemImgService.getItemRepImg(itemId);
+            List<ItemImg> itemImgList = itemImgService.getItemImgList(itemId);
+
+            List<ItemImgDto> itemImgDtoList = new ArrayList<>();
+
+            for (ItemImg itemImg : itemImgList) {
+                ItemImgDto itemImgDto = ItemImgDto.of(itemImg);
+                itemImgDtoList.add(itemImgDto);
+            }
+
+            ItemFormDto itemFormDto = ItemFormDto.adminDtoOf(findItem.get());
+            itemFormDto.setItemRepImgDto(ItemImgDto.of(itemRepImg));
+            itemFormDto.setItemImgDtoList(itemImgDtoList);
+            return itemFormDto;
+        }else{
+            throw new EntityNotFoundException();
+        }
+    }
+
     public ItemFormDto getItemData(Long itemId) {
 
         Optional<Item> findItem = itemRepository.findById(itemId);
@@ -127,6 +155,15 @@ public class ItemService {
             return itemFormDto;
         }else{
             throw new EntityNotFoundException();
+        }
+    }
+
+    public Item getItem(Long itemId) {
+        Optional<Item> findItem = itemRepository.findById(itemId);
+        if (findItem.isPresent()) {
+            return findItem.get();
+        } else {
+            throw new EntityNotFoundException("그런 상품이 없습니다.");
         }
     }
 

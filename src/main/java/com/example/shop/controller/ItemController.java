@@ -2,7 +2,6 @@ package com.example.shop.controller;
 
 import com.example.shop.Dtos.item.ItemFormDto;
 import com.example.shop.Dtos.item.ItemSearchDto;
-import com.example.shop.domain.Item;
 import com.example.shop.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.apache.tika.Tika;
@@ -20,7 +19,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/item")
@@ -87,7 +85,7 @@ public class ItemController {
     @GetMapping("/edit/{itemId}")
     public String itemEditPage(@PathVariable Long itemId, Model model) {
         try {
-            ItemFormDto itemFormDto = itemService.getItemData(itemId);
+            ItemFormDto itemFormDto = itemService.getAdminItemData(itemId);
             model.addAttribute("itemFormDto", itemFormDto);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);

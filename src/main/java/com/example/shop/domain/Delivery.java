@@ -6,7 +6,7 @@ import lombok.Getter;
 
 import javax.persistence.*;
 
-@Entity
+//@Entity
 @Getter
 public class Delivery extends DateBaseEntity {
 

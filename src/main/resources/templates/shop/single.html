@@ -1,0 +1,108 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title>[[${itemFormDto.itemName}]]</title>
+</head>
+<style>
+    .item-image{
+        display: block;
+        margin: 0px auto;
+        margin-bottom: 10px;
+    }
+</style>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- breadcrumb-section -->
+<div class="breadcrumb-section breadcrumb-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2 text-center">
+                <div class="breadcrumb-text">
+                    <p>See more Details</p>
+                    <h1 th:text="${itemFormDto.itemName}">상품 이름</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end breadcrumb section -->
+
+<!-- single product -->
+<div class="single-product mt-150 mb-150">
+    <div class="container">
+        <div class="row" th:object="${itemFormDto}">
+            <div class="col-md-5">
+                <div class="single-product-img">
+                    <img th:src="@{${itemFormDto.itemRepImgDto.imgUrl}}">
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="single-product-content">
+                    <input type="hidden" id="itemId" th:value="*{id}">
+                    <h3 th:text="*{itemName}">상품 이름</h3>
+                    <p class="single-product-pricing" th:text="|*{price}원|">100원<span th:text="*{status}">품절</span> </p>
+                    <p th:text="*{itemDetails}">상품 상세 설명</p>
+                    <div class="single-product-form">
+                        <form action="#">
+                            <input id="count" type="number" placeholder="0">
+                        </form>
+                        <h3 id="total-price">결제 금액 : 0원</h3>
+                        <a href="#" class="cart-btn"><i class="fas fa-shopping-cart"></i> 장바구니에 담기</a>
+                        <a type="button" class="cart-btn" onclick="order()">주문하기</a>
+                        <p><strong>카테고리: </strong>[[*{category.description}]]</p>
+                        <p><strong>상태: </strong>[[*{status.description}]]</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end single product -->
+<img class="item-image" th:each="itemImgDto : ${itemFormDto.itemImgDtoList}" th:src="|${itemImgDto.imgUrl}|" width="60%"/>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<script th:inline="javascript">
+    function totalPrice(cnt, price){
+        $("#total-price").text("결제 금액 : " + String(cnt * price) + "원");
+    }
+    $("#count").on("change", event => totalPrice($("#count").val(), [[${itemFormDto.price}]]))
+
+    function order(){
+        const token = $("meta[name='_csrf']").attr("content");
+        const header = $("meta[name='_csrf_header']").attr("content");
+
+        const url = "/order";
+
+        const paramData = {
+            itemId : $("#itemId").val(),
+            count : $("#count").val()
+        };
+
+        var param = JSON.stringify(paramData);
+
+        $.ajax({
+            url : url,
+            type : "POST",
+            contentType : "application/json",
+            data : param,
+            beforeSend : function(xhr){
+                xhr.setRequestHeader(header, token);
+            },
+            dataType : "json",
+            cache : false,
+            success : function(result, status){
+                alert("주문이 완료 되었습니다.");
+            },
+            error : function(jqXHR, status, error){
+                if(jqXHR.status == '401'){
+                    alert('로그인 후 이용해주세요');
+                    location.href='/member/login';
+                }else{
+                    alert(jqXHR.responseText);
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

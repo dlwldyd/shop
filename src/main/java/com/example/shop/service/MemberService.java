@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.Optional;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -20,12 +23,24 @@ public class MemberService {
     }
 
     private void validateDuplicateMember(Member member) {
-        Member findMember = memberRepository.findByUsername(member.getUsername());
-        if (findMember != null) {
-            if (findMember.getPhone().equals(member.getPhone())) {
+
+        Optional<Member> findMember = memberRepository.findByUsername(member.getUsername());
+
+        if (findMember.isPresent()) {
+            if (findMember.get().getPhone().equals(member.getPhone())) {
                 throw new IllegalStateException("이미 가입된 회원 입니다.");
             }
             throw new IllegalStateException("중복된 아이디 입니다.");
+        }
+    }
+
+    public Member getMemberByUsername(String username) {
+        Optional<Member> findMember = memberRepository.findByUsername(username);
+
+        if (findMember.isPresent()) {
+            return findMember.get();
+        } else {
+            throw new EntityNotFoundException("로그인을 해주세요");
         }
     }
 }

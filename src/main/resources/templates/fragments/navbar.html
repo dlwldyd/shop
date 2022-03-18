@@ -28,7 +28,7 @@
                                 <ul>
                                     <li sec:authorize="hasRole('ADMIN')"><a  href="/item/registration">상품등록</a></li>
                                     <li sec:authorize="hasRole('ADMIN')"><a  href="/item/manage">상품관리</a></li>
-                                    <li><a href="about.html">About</a></li>
+                                    <li><a href="/shop">쇼핑하기</a></li>
                                     <li><a href="#">Pages</a>
                                         <ul class="sub-menu">
                                             <li><a href="404.html">404 page</a></li>
@@ -63,7 +63,6 @@
                                             <li>
                                                 <div class="header-icons">
                                                     <a class="shopping-cart" href="cart.html"><i class="fas fa-shopping-cart"></i></a>
-                                                    <a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
                                                 </div>
                                             </li>
                                         </ul>
@@ -79,25 +78,6 @@
             </div>
         </div>
         <!-- end header -->
-
-        <!-- search area -->
-        <div class="search-area">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <span class="close-btn"><i class="fas fa-window-close"></i></span>
-                        <div class="search-bar">
-                            <div class="search-bar-tablecell">
-                                <h3>Search For:</h3>
-                                <input type="text" placeholder="Keywords">
-                                <button type="submit">Search <i class="fas fa-search"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- end search area -->
     </div>
 </body>
 </html>

@@ -4,6 +4,7 @@ import com.example.shop.Dtos.item.ItemFormDto;
 import com.example.shop.domain.baseentity.DateBaseEntity;
 import com.example.shop.enumtype.ItemCategory;
 import com.example.shop.enumtype.ItemStatus;
+import com.example.shop.exception.OutOfStockException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,6 +46,10 @@ public class Item extends DateBaseEntity {
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<ItemImg> itemImgList = new ArrayList<>();
 
+    public void setStatus(ItemStatus status) {
+        this.status = status;
+    }
+
     public Item(String itemName, int price, int stockQuantity, ItemStatus status, ItemCategory category, String itemDetail) {
         this.itemName = itemName;
         this.price = price;
@@ -61,11 +66,15 @@ public class Item extends DateBaseEntity {
         this.status = itemFormDto.getStatus();
         this.category = itemFormDto.getCategory();
         this.itemDetail = itemFormDto.getItemDetails();
-//        if (!itemFormDto.getItemRepImg().isEmpty()) {
-//            this.itemImgList.removeIf(ItemImg::isRepImg);
-//        }
-//        if (itemFormDto.getItemImgs().size() != 1 || !itemFormDto.getItemImgs().get(0).isEmpty()) {
-//            this.itemImgList.removeIf(itemImg -> !itemImg.isRepImg());
-//        }
+    }
+
+    public void removeStock(int orderNumber) {
+        int restStock = this.stockQuantity - orderNumber;
+        if (restStock < 0) {
+            throw new OutOfStockException("재고가 부족합니다.(현재 재고량 : " + this.stockQuantity + ")");
+        } else if (restStock == 0) {
+            this.status = ItemStatus.SOLD_OUT;
+        }
+        this.stockQuantity = restStock;
     }
 }

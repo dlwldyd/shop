@@ -7,6 +7,7 @@ import com.example.shop.enumtype.ItemStatus;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -24,12 +25,14 @@ public class ItemFormDto {
     private String itemName;
 
     @NotNull
+    @Min(0)
     private Integer price;
 
     @NotBlank
     private String itemDetails;
 
     @NotNull
+    @Min(0)
     private Integer stockQuantity;
 
     @NotNull
@@ -59,6 +62,16 @@ public class ItemFormDto {
         this.category = category;
     }
 
+    public ItemFormDto(Long id, String itemName, Integer price, String itemDetails, Integer stockQuantity, ItemStatus status, ItemCategory category) {
+        this.id = id;
+        this.itemName = itemName;
+        this.price = price;
+        this.itemDetails = itemDetails;
+        this.stockQuantity = stockQuantity;
+        this.status = status;
+        this.category = category;
+    }
+
     public ItemFormDto(Long id, String itemName, Integer price, String itemDetails, Integer stockQuantity, ItemStatus status, ItemCategory category, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
         this.id = id;
         this.itemName = itemName;
@@ -72,15 +85,20 @@ public class ItemFormDto {
     }
 
     public Item createItem() {
-        return new Item(this.getItemName(),
+        Item item = new Item(this.getItemName(),
                 this.getPrice(),
                 this.getStockQuantity(),
                 this.getStatus(),
                 this.getCategory(),
                 this.getItemDetails());
+
+        if (item.getStockQuantity() == 0) {
+            item.setStatus(ItemStatus.SOLD_OUT);
+        }
+        return item;
     }
 
-    public static ItemFormDto of(Item item) {
+    public static ItemFormDto adminDtoOf(Item item) {
         ItemFormDto itemFormDto = new ItemFormDto(item.getId(),
                 item.getItemName(),
                 item.getPrice(),
@@ -90,6 +108,27 @@ public class ItemFormDto {
                 item.getCategory(),
                 item.getCreatedDate(),
                 item.getLastModifiedDate());
+
+        List<ItemImg> itemImgList = item.getItemImgList();
+        for (ItemImg itemImg : itemImgList) {
+            if (itemImg.isRepImg()) {
+                itemFormDto.setItemRepImgDto(ItemImgDto.of(itemImg));
+            } else {
+                itemFormDto.getItemImgDtoList().add(ItemImgDto.of(itemImg));
+            }
+        }
+
+        return itemFormDto;
+    }
+
+    public static ItemFormDto of(Item item) {
+        ItemFormDto itemFormDto = new ItemFormDto(item.getId(),
+                item.getItemName(),
+                item.getPrice(),
+                item.getItemDetail(),
+                item.getStockQuantity(),
+                item.getStatus(),
+                item.getCategory());
 
         List<ItemImg> itemImgList = item.getItemImgList();
         for (ItemImg itemImg : itemImgList) {

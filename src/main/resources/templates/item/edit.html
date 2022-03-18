@@ -138,6 +138,9 @@ textarea {
                             <input th:field="*{itemRepImgDto.originImgName}" class="upload-name" disabled>
                             <label th:for="itemRepImg">파일찾기</label>
                             <input type="file" th:field="*{itemRepImg}" onchange="javascript:document.getElementById('itemRepImgDto.originImgName').value = this.value">
+                            <div>
+                                * 상품 대표 이미지를 현재 업로드한 이미지로 대체합니다.
+                            </div>
                             <div class="field-error" th:errors="*{itemRepImg}">
                                 파일 오류
                             </div>
@@ -147,7 +150,7 @@ textarea {
                             <label th:for="itemImgs">파일찾기</label>
                             <input type="file" th:field="*{itemImgs}" multiple>
                             <div>
-                                * 서버에 저장되어 있는 모든 파일을 현재 업로드한 파일로 대체합니다.
+                                * 상품 대표 이미지를 제외한 모든 이미지를 현재 업로드한 이미지로 대체합니다.
                             </div>
                             <div class="field-error" th:errors="*{itemImgs}">
                                 파일 오류
