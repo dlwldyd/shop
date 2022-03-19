@@ -8,6 +8,12 @@
 .margin-bottom{
     margin-bottom: 100px;
 }
+#payment-amount{
+    float: left;
+}
+.order-cancel{
+    float: right;
+}
 </style>
 <body>
 <div th:replace="~{fragments/navbar :: navbar}"></div>
@@ -35,7 +41,9 @@
             <div class="col-lg-10 col-md-12">
                 <div class="cart-table-wrap">
                     <h3 th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd HH:mm')}"></h3>
-                    <h3 th:text="|결제 금액 : ${order.totalPrice}원|"></h3>
+                    <a onclick="cancelOrder($(this).attr('value'))" type="button" th:if="${#strings.equals(order.orderStatus, 'ORDER')}" th:value="${order.orderId}" class="boxed-btn order-cancel">주문취소</a>
+                    <h3 class="order-cancel" th:if="${#strings.equals(order.orderStatus, 'CANCEL')}">주문 취소됨</h3>
+                    <h3 id="payment-amount" th:text="|결제 금액 : ${order.totalPrice}원|"></h3>
                     <table class="cart-table">
                         <thead class="cart-table-head">
                         <tr class="table-head-row">
@@ -80,9 +88,46 @@
 <!-- end cart -->
 
 <footer th:replace="~{fragments/footer :: footer}"></footer>
-<script>
+<script th:inline="javascript">
     function page(page){
         location.href = "/orders?page=" + page;
+    }
+
+    function cancelOrder(orderId){
+        const token = $("meta[name='_csrf']").attr("content");
+        const header = $("meta[name='_csrf_header']").attr("content");
+        console.log(orderId);
+
+        const url = "/order/" + orderId + "/cancel";
+        const paramData = {
+            orderId : orderId
+        };
+
+        const param = JSON.stringify(paramData);
+
+        $.ajax({
+            url : url,
+            type : "POST",
+            contentType : "application/json",
+            data : param,
+            beforeSend : function(xhr){
+                xhr.setRequestHeader(header, token);
+            },
+            dataType : "json",
+            cache : false,
+            success : function(result, status){
+                alert("주문이 취소 되었습니다.")
+                location.href = '/orders'
+            },
+            error : function(jqXHR, status, error){
+                if(jqXHR.status == '401'){
+                    alert("로그인 후 이용해 주세요");
+                    location.href = '/member/login';
+                }else{
+                    alert(jqXHR.responseText);
+                }
+            }
+        });
     }
 </script>
 </body>

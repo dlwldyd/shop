@@ -12,8 +12,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -40,6 +42,15 @@ public class OrderService {
         return order;
     }
 
+    @Transactional
+    public void cancelOrder(Long orderId) {
+        Optional<Order> order = orderRepository.findById(orderId);
+        if (order.isEmpty()) {
+            throw new EntityNotFoundException();
+        }
+        order.get().cancelOrder();
+    }
+
     public Page<OrderHistDto> getOrderList(String username, Pageable pageable) {
 
         List<Order> orders = orderRepository.findOrders(username, pageable);
@@ -61,5 +72,16 @@ public class OrderService {
         }
 
         return new PageImpl<>(orderHistDtos, pageable, count);
+    }
+
+    public boolean validateOrder(Long orderId, String username) {
+        Member loginMember = memberService.getMemberByUsername(username);
+        Optional<Order> order = orderRepository.findById(orderId);
+        if (order.isEmpty()) {
+            throw new EntityNotFoundException();
+        }
+        Member orderMember = order.get().getMember();
+
+        return loginMember.getUsername().equals(orderMember.getUsername());
     }
 }
