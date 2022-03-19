@@ -1,23 +1,28 @@
 package com.example.shop.controller;
 
 import com.example.shop.Dtos.order.OrderDto;
+import com.example.shop.Dtos.order.OrderHistDto;
 import com.example.shop.domain.Order;
 import com.example.shop.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Controller
@@ -49,5 +54,19 @@ public class OrderController {
         } catch (RuntimeException e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/orders")
+    public String orderHist(@PageableDefault(size = 4) Pageable pageable, Model model) {
+
+        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.getUsername();
+        Page<OrderHistDto> orderHistDtos = orderService.getOrderList(username, pageable);
+
+        model.addAttribute("orders", orderHistDtos);
+        model.addAttribute("page", pageable.getPageNumber());
+        model.addAttribute("maxPage", 5);
+
+        return "order/orderHist";
     }
 }

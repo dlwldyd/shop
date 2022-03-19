@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title>주문 내역</title>
+</head>
+<style>
+.margin-bottom{
+    margin-bottom: 100px;
+}
+</style>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- breadcrumb-section -->
+<div class="breadcrumb-section breadcrumb-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2 text-center">
+                <div class="breadcrumb-text">
+                    <p>See more Details</p>
+                    <h1>주문 내역</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end breadcrumb section -->
+
+<!-- cart -->
+<div class="cart-section mt-150 mb-150">
+    <div class="container">
+        <div class="row margin-bottom" th:each="order : ${orders.content}">
+            <div class="col-lg-1"></div>
+            <div class="col-lg-10 col-md-12">
+                <div class="cart-table-wrap">
+                    <h3 th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd HH:mm')}"></h3>
+                    <h3 th:text="|결제 금액 : ${order.totalPrice}원|"></h3>
+                    <table class="cart-table">
+                        <thead class="cart-table-head">
+                        <tr class="table-head-row">
+                            <th class="product-image">상품 이미지</th>
+                            <th class="product-name">상품 이름</th>
+                            <th class="product-price">가격</th>
+                            <th class="product-quantity">구매 수량</th>
+                            <th class="product-total">전체 가격</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="table-body-row" th:each="orderItemDto : ${order.orderItemDtoList}">
+                            <td class="product-image"><img th:src="${orderItemDto.imgUrl}"></td>
+                            <td class="product-name" th:text="${orderItemDto.itemName}">상품 이름</td>
+                            <td class="product-price" th:text="|${orderItemDto.price}원|">10000원</td>
+                            <td class="product-quantity" th:text="|${orderItemDto.count}개|">10개</td>
+                            <td class="product-total" th:text="|${orderItemDto.totalPrice}원|">100000원</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-lg-1"></div>
+        </div>
+        <div class="row">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 text-center" th:with="start = ${(orders.number / maxPage) * maxPage + 1}, end = ${orders.totalPages - start >= maxPage - 1 ? start + maxPage -1 : (orders.totalPages == 0 ? 1 : orders.totalPages)}">
+                        <div class="pagination-wrap">
+                            <ul>
+                                <li th:if="${orders.number} ge 5"><a th:onclick="'javascript:page(' + ${start + maxPage - 7} + ')'">Prev</a></li>
+                                <li th:each="page: ${#numbers.sequence(start, end)}"><a th:classappend="${orders.number eq page - 1} ? 'active' : _" th:onclick="'javascript:page(' + ${page - 1} + ')'">[[${page}]]</a></li>
+                                <li th:if="${orders.number + 1} le ${((orders.totalPages - 1) / maxPage) * maxPage}"><a th:onclick="'javascript:page(' + ${start + 4} + ')'">Next</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end cart -->
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<script>
+    function page(page){
+        location.href = "/orders?page=" + page;
+    }
+</script>
+</body>
+</html>

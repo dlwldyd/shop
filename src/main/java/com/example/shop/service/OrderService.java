@@ -1,12 +1,14 @@
 package com.example.shop.service;
 
 import com.example.shop.Dtos.order.OrderDto;
-import com.example.shop.domain.Item;
-import com.example.shop.domain.Member;
-import com.example.shop.domain.Order;
-import com.example.shop.domain.OrderItem;
+import com.example.shop.Dtos.order.OrderHistDto;
+import com.example.shop.Dtos.order.OrderItemDto;
+import com.example.shop.domain.*;
 import com.example.shop.repository.order.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,7 @@ public class OrderService {
     private final ItemService itemService;
     private final MemberService memberService;
     private final OrderRepository orderRepository;
+    private final ItemImgService itemImgService;
 
     @Transactional
     public Order order(OrderDto orderDto, String username) {
@@ -35,5 +38,28 @@ public class OrderService {
         orderRepository.save(order);
 
         return order;
+    }
+
+    public Page<OrderHistDto> getOrderList(String username, Pageable pageable) {
+
+        List<Order> orders = orderRepository.findOrders(username, pageable);
+        Long count = orderRepository.countOrder(username);
+
+        List<OrderHistDto> orderHistDtos = new ArrayList<>();
+
+        for (Order order : orders) {
+            OrderHistDto orderHistDto = new OrderHistDto(order);
+            List<OrderItem> orderItems = order.getOrderItems();
+            for (OrderItem orderItem : orderItems) {
+
+                ItemImg itemRepImg = itemImgService.getItemRepImg(orderItem.getItem().getId());
+                OrderItemDto orderItemDto = new OrderItemDto(orderItem, itemRepImg.getImgUrl());
+                orderHistDto.addOrderItemDto(orderItemDto);
+            }
+
+            orderHistDtos.add(orderHistDto);
+        }
+
+        return new PageImpl<>(orderHistDtos, pageable, count);
     }
 }
