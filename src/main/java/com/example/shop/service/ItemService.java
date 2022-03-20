@@ -159,12 +159,8 @@ public class ItemService {
     }
 
     public Item getItem(Long itemId) {
-        Optional<Item> findItem = itemRepository.findById(itemId);
-        if (findItem.isPresent()) {
-            return findItem.get();
-        } else {
-            throw new EntityNotFoundException("그런 상품이 없습니다.");
-        }
+
+        return itemRepository.findById(itemId).orElseThrow(() -> new EntityNotFoundException("그런 상품이 없습니다."));
     }
 
     /**

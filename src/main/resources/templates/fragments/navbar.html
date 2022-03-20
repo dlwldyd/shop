@@ -26,25 +26,10 @@
                             <!-- menu start -->
                             <nav class="main-menu">
                                 <ul>
-                                    <li><a  href="/item/registration">상품등록</a></li>
-                                    <li><a  href="/item/manage">상품관리</a></li>
-                                    <li><a href="/shop">쇼핑하기</a></li>
+                                    <li><a href="/item/registration">상품등록</a></li>
+                                    <li><a href="/item/manage">상품관리</a></li>
+                                    <li><a href="/shop">SHOP</a></li>
                                     <li><a href="/orders">주문내역</a></li>
-                                    <li><a href="news.html">News</a>
-                                        <ul class="sub-menu">
-                                            <li><a href="news.html">News</a></li>
-                                            <li><a href="single-news.html">Single News</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="contact.html">Contact</a></li>
-                                    <li><a href="shop.html">Shop</a>
-                                        <ul class="sub-menu">
-                                            <li><a href="shop.html">Shop</a></li>
-                                            <li><a href="checkout.html">Check Out</a></li>
-                                            <li><a href="single-product.html">Single Product</a></li>
-                                            <li><a href="cart.html">Cart</a></li>
-                                        </ul>
-                                    </li>
                                     <li>
                                         <ul>
                                             <li sec:authorize="isAnonymous()"><a href="/member/login">로그인</a></li>
@@ -52,14 +37,13 @@
                                             <li sec:authorize="isAuthenticated()"><a href="/member/logout">로그아웃</a></li>
                                             <li>
                                                 <div class="header-icons">
-                                                    <a class="shopping-cart" href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+                                                    <a class="shopping-cart" href="/cart"><i class="fas fa-shopping-cart"></i></a>
                                                 </div>
                                             </li>
                                         </ul>
                                     </li>
                                 </ul>
                             </nav>
-                            <a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
                             <div class="mobile-menu"></div>
                             <!-- menu end -->
                         </div>

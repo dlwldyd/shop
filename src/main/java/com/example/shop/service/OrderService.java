@@ -51,6 +51,22 @@ public class OrderService {
         order.get().cancelOrder();
     }
 
+    @Transactional
+    public Order orders(List<OrderDto> orderDtoList, String username) {
+
+        Member member = memberService.getMemberByUsername(username);
+        List<OrderItem> orderItemList = new ArrayList<>();
+
+        for (OrderDto orderDto : orderDtoList) {
+            Item item = itemService.getItem(orderDto.getItemId());
+            OrderItem orderItem = OrderItem.createOrderItem(item, orderDto.getCount());
+            orderItemList.add(orderItem);
+        }
+
+        Order order = Order.createOrder(member, orderItemList);
+        return orderRepository.save(order);
+    }
+
     public Page<OrderHistDto> getOrderList(String username, Pageable pageable) {
 
         List<Order> orders = orderRepository.findOrders(username, pageable);

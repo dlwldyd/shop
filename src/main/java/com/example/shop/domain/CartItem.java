@@ -1,12 +1,15 @@
 package com.example.shop.domain;
 
 import com.example.shop.domain.baseentity.DateBaseEntity;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CartItem extends DateBaseEntity {
 
     @Id
@@ -23,4 +26,18 @@ public class CartItem extends DateBaseEntity {
     private Item item;
 
     private int count;
+
+    public CartItem(Cart cart, Item item, int count) {
+        this.cart = cart;
+        this.item = item;
+        this.count = count;
+    }
+
+    public void addCount(int count) {
+        this.count += count;
+    }
+
+    public void updateCount(int count) {
+        this.count = count;
+    }
 }
