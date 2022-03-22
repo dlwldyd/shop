@@ -84,6 +84,10 @@ public class ItemFormDto {
         this.lastModifiedDate = lastModifiedDate;
     }
 
+    /**
+     * ItemFormDto 객체를 Item 객체로 변환하는 메서드
+     * @return 변환된 Item 객체
+     */
     public Item createItem() {
         Item item = new Item(this.getItemName(),
                 this.getPrice(),
@@ -98,6 +102,12 @@ public class ItemFormDto {
         return item;
     }
 
+    /**
+     * Item 객체를 ItemFormDto 객체로 변환하는 메서드,
+     * createdDate, lastModifiedDate 도 포함됨
+     * @param item 변환할 Item 객체
+     * @return 변환된 ItemFormDto 객체
+     */
     public static ItemFormDto adminDtoOf(Item item) {
         ItemFormDto itemFormDto = new ItemFormDto(item.getId(),
                 item.getItemName(),
@@ -121,6 +131,12 @@ public class ItemFormDto {
         return itemFormDto;
     }
 
+    /**
+     * Item 객체를 ItemFormDto 객체로 변환하는 메서드,
+     * createdDate, lastModifiedDate 는 제외시킴
+     * @param item 변환할 Item 객체
+     * @return 변환된 ItemFormDto 객체
+     */
     public static ItemFormDto of(Item item) {
         ItemFormDto itemFormDto = new ItemFormDto(item.getId(),
                 item.getItemName(),

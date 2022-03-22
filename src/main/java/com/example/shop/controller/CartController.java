@@ -26,6 +26,9 @@ public class CartController {
 
     private final CartService cartService;
 
+    /**
+     * 장바구니 페이지
+     */
     @GetMapping("/cart")
     public String cart(Model model) {
 
@@ -43,6 +46,9 @@ public class CartController {
         return "cart/cartList";
     }
 
+    /**
+     * 장바구니에 담기
+     */
     @PostMapping("/cart")
     @ResponseBody
     public ResponseEntity<String> addCart(@RequestBody @Validated CartItemDto cartItemDto, BindingResult bindingResult) {
@@ -64,6 +70,9 @@ public class CartController {
         return new ResponseEntity<String>(cartItem.getId().toString(), HttpStatus.OK);
     }
 
+    /**
+     * 장바구니에 담긴 상품 수량 조절
+     */
     @PatchMapping("/cartItem/{cartItemId}")
     @ResponseBody
     public ResponseEntity<String> updateCartItem(@PathVariable Long cartItemId, int count) {
@@ -81,6 +90,9 @@ public class CartController {
         return new ResponseEntity<String>(cartItemId.toString(), HttpStatus.OK);
     }
 
+    /**
+     * 장바구니에서 상품 삭제
+     */
     @DeleteMapping("/cartItem/{cartItemId}")
     @ResponseBody
     public ResponseEntity<String> deleteCartItem(@PathVariable Long cartItemId) {
@@ -96,6 +108,9 @@ public class CartController {
         return new ResponseEntity<>(cartItemId.toString(), HttpStatus.OK);
     }
 
+    /**
+     * 장바구니에 담긴 상품 주문
+     */
     @PostMapping("/cart/orders")
     @ResponseBody
     public ResponseEntity<String> orderCartItem(@RequestBody CartOrderDto cartOrderDto) {

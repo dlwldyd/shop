@@ -16,6 +16,9 @@ public class InitAdmin {
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * admin 사용자 추가용 메서드
+     */
     @PostConstruct
     public void init() {
         memberService.saveMember(new Member(

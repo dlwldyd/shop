@@ -67,6 +67,11 @@ public class Item extends DateBaseEntity {
         this.itemDetail = itemFormDto.getItemDetails();
     }
 
+    /**
+     * 주문한 개수만큼 재고를 감소시키는 메서드,
+     * 재고 이상으로 주문시 예외를 발생시킴
+     * @param orderNumber 주문한 상품의 개수
+     */
     public void removeStock(int orderNumber) {
         int restStock = this.stockQuantity - orderNumber;
         if (restStock < 0) {

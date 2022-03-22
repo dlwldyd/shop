@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,6 +30,12 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final ItemImgService itemImgService;
 
+    /**
+     * 데이터베이스에 상품을 저장,
+     * Item 엔티티, ItemImg 엔티티, 이미지 파일을 저장한다.
+     * @param itemFormDto 저장할 상품에 대한 정보가 담겨있는 DTO
+     * @return 데이터베이스에 저장된 상품을 반환
+     */
     @Transactional
     public Item saveItem(ItemFormDto itemFormDto) throws IOException {
 
@@ -59,12 +64,23 @@ public class ItemService {
         return savedItem;
     }
 
+    /**
+     * 상품을 데이터베이스에서 삭제함
+     * @param itemId 살제할 상품의 id
+     */
     @Transactional
     public void deleteItem(Long itemId) {
         itemImgService.deleteAllItemImg(itemId);
         itemRepository.deleteById(itemId);
     }
 
+    /**
+     * 데이터베이스에 저장된 상품을 수정함,
+     * Item 엔티티, ItemImg 엔티티, 이미지 파일을 수정한다.
+     * itemFormDto 에 이미지 파일이 담겨 있지 않다면 ItemImg 엔티티와 이미지 파일은 수정되지 않음
+     * @param itemFormDto 수정할 상품에 대한 정보가 담긴 DTO
+     * @return 수정된 상품 엔티티가 반환
+     */
     @Transactional
     public Item updateItem(ItemFormDto itemFormDto) throws IOException {
 
@@ -105,14 +121,30 @@ public class ItemService {
         throw new EntityNotFoundException();
     }
 
+    /**
+     * 검색 조건에 맞는 상품 정보와 페이징 정보를 담은 Page 객체를 반환함,
+     * createdDate, lastModifiedDate 정보도 담김
+     * @param itemSearchDto 검색 조건
+     * @param pageable 페이징
+     */
     public Page<ItemFormDto> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
         return itemRepository.getAdminItemPage(itemSearchDto, pageable);
     }
 
+    /**
+     * 검색 조건에 맞는 상품 정보와 페이징 정보를 담은 Page 객체를 반환함,
+     * createdDate, lastModifiedDate 정보는 제외됨
+     * @param itemSearchDto 검색 조건
+     * @param pageable 페이징
+     */
     public Page<ItemFormDto> getItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
         return itemRepository.getItemPage(itemSearchDto, pageable);
     }
 
+    /**
+     * 홈 화면에서 상품을 표시하기 위한 용도,
+     * 3개의 상품에 대한 정보가 있는 List 를 반환함
+     */
     public List<ItemFormDto> getItemList() {
         Pageable pageable = PageRequest.of(0, 3);
         List<Item> itemList = itemRepository.getItemList(pageable);
@@ -120,6 +152,12 @@ public class ItemService {
         return itemList.stream().map(ItemFormDto::of).collect(Collectors.toList());
     }
 
+    /**
+     * 특정 상품의 정보를 가져오는 메서드,
+     * createdDate, lastModifiedDate 포함시킴
+     * @param itemId 상품 id
+     * @return 상품에 대한 정보를 담은 ItemFormDto
+     */
     public ItemFormDto getAdminItemData(Long itemId) {
 
         Optional<Item> findItem = itemRepository.findById(itemId);
@@ -144,6 +182,12 @@ public class ItemService {
         }
     }
 
+    /**
+     * 특정 상품의 정보를 가져오는 메서드,
+     * createdDate, lastModifiedDate 제외
+     * @param itemId 상품 id
+     * @return 상품에 대한 정보를 담은 ItemFormDto
+     */
     public ItemFormDto getItemData(Long itemId) {
 
         Optional<Item> findItem = itemRepository.findById(itemId);

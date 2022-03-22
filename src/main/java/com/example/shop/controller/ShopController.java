@@ -19,6 +19,9 @@ public class ShopController {
 
     private final ItemService itemService;
 
+    /**
+     * SHOP 화면
+     */
     @GetMapping("/shop")
     public String shop(@ModelAttribute ItemSearchDto itemSearchDto,
                        @PageableDefault(size = 12) Pageable pageable,
@@ -29,6 +32,9 @@ public class ShopController {
         return "shop/main";
     }
 
+    /**
+     * 상품 상세 화면
+     */
     @GetMapping("/shop/{itemId}")
     public String singleItem(@PathVariable Long itemId, Model model) {
         ItemFormDto itemFormDto = itemService.getItemData(itemId);

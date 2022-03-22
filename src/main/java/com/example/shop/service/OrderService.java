@@ -27,6 +27,13 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ItemImgService itemImgService;
 
+    /**
+     * 단일 상품 주문을 위한 메서드,
+     * OrderItem, Order 엔티티를 생성하고 저장함
+     * @param orderDto 주문할 상품 id 와 개수가 담긴 DTO
+     * @param username 사용자 아이디
+     * @return
+     */
     @Transactional
     public Order order(OrderDto orderDto, String username) {
         Item item = itemService.getItem(orderDto.getItemId());
@@ -42,6 +49,10 @@ public class OrderService {
         return order;
     }
 
+    /**
+     * 주문 취소 메서드
+     * @param orderId 취소할 주문 id
+     */
     @Transactional
     public void cancelOrder(Long orderId) {
         Optional<Order> order = orderRepository.findById(orderId);
@@ -51,6 +62,12 @@ public class OrderService {
         order.get().cancelOrder();
     }
 
+    /**
+     * 장바구니에 담긴 상품들을 주문하기 위한 메서드
+     * @param orderDtoList 주문할 상품의 id와 개수가 담긴 DTO 의 리스트
+     * @param username 사용자 아이디
+     * @return
+     */
     @Transactional
     public Order orders(List<OrderDto> orderDtoList, String username) {
 
@@ -67,6 +84,12 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
+    /**
+     * 사용자의 주문 내역을 받아오는 메서드
+     * @param username 사용자 아이디
+     * @param pageable 페이징
+     * @return 주문일자, 주문 상태(취소됐는지 아닌지), 결제금액이 담긴 OrderHistDto 의 Page 객체
+     */
     public Page<OrderHistDto> getOrderList(String username, Pageable pageable) {
 
         List<Order> orders = orderRepository.findOrders(username, pageable);
@@ -90,6 +113,12 @@ public class OrderService {
         return new PageImpl<>(orderHistDtos, pageable, count);
     }
 
+    /**
+     * 해당 사용자가 Order 엔티티를 수정할 권한이 있는지 검사하는 메서드
+     * @param orderId Order 엔티티의 id
+     * @param username 사용자 아이디
+     * @return true 면 수정 가능, false 면 수정 불가
+     */
     public boolean validateOrder(Long orderId, String username) {
         Member loginMember = memberService.getMemberByUsername(username);
         Optional<Order> order = orderRepository.findById(orderId);

@@ -15,6 +15,9 @@ public class HomeController {
 
     private final ItemService itemService;
 
+    /**
+     * 홈 화면
+     */
     @GetMapping("/")
     public String home(Model model) {
         List<ItemFormDto> itemList = itemService.getItemList();

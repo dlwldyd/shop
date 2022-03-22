@@ -1,6 +1,5 @@
 package com.example.shop.service;
 
-import com.example.shop.Dtos.item.ItemImgDto;
 import com.example.shop.domain.ItemImg;
 import com.example.shop.repository.itemimg.ItemImgRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +22,11 @@ public class ItemImgService {
     @Value("${itemImgLocation}")
     private String itemImgLocation;
 
+    /**
+     * ItemImg 엔티티를 생성 후 저장하고 이미지 파일을 저장함
+     * @param itemImg 저장할 ItemImg 엔티티
+     * @param itemImgFile 저장할 이미지 파일
+     */
     @Transactional
     public void saveItemImg(ItemImg itemImg, MultipartFile itemImgFile) throws IOException {
 
@@ -31,6 +35,10 @@ public class ItemImgService {
         fileService.uploadFile(imgFullPathName, itemImgFile);
     }
 
+    /**
+     * 상품의 모든 ItemImg 엔티티와 이미지 파일을 삭제함
+     * @param itemId 삭제할 상품의 id
+     */
     @Transactional
     public void deleteAllItemImg(Long itemId) {
         List<ItemImg> findItemImg = itemImgRepository.findItemImgByItemId(itemId);
@@ -38,6 +46,11 @@ public class ItemImgService {
         itemImgRepository.deleteItemImgByItemId(itemId);
     }
 
+    /**
+     * 상품 대표 이미지를 제외한 모든 ItemImg 엔티티를 삭제하고
+     * 상품 대표 이미지를 제외한 모든 이미지 파일을 삭제함
+     * @param itemId 삭제할 상품의 id
+     */
     @Transactional
     public void deleteNonItemRepImg(Long itemId) {
         List<ItemImg> findItemImg = itemImgRepository.findNonItemRepImgByItemId(itemId);
@@ -45,6 +58,13 @@ public class ItemImgService {
         itemImgRepository.deleteNonItemImgByItemId(itemId);
     }
 
+    /**
+     * 상품 대표 이미지를 업로드한 상품 대표 이미지로 대체함,
+     * ItemImg 엔티티의 경우 update 쿼리를 보내면 createdDate 가 수정되지 않기 때문에
+     * delete 쿼리 후 insert 쿼리를 보냄
+     * @param itemImg 업데이트할 ItemImg 엔티티
+     * @param itemImgFile 새로 대체할 상품 대표 이미지 파일
+     */
     @Transactional
     public void updateItemRepImg(ItemImg itemImg, MultipartFile itemImgFile) throws IOException {
         ItemImg itemRepImg = itemImgRepository.findItemRepImgByItemId(itemImg.getItem().getId());
@@ -59,6 +79,9 @@ public class ItemImgService {
         return itemImgRepository.findItemRepImgByItemId(itemId);
     }
 
+    /**
+     * 상품 대표 이미지를 제외한 나머지 이미지에 대한 엔티티를 가져온다.
+     */
     public List<ItemImg> getItemImgList(Long itemId) {
         return itemImgRepository.findNonItemRepImgByItemId(itemId);
     }

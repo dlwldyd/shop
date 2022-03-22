@@ -22,12 +22,18 @@ public class MemberController {
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * 회원가입 화면
+     */
     @GetMapping("/registration")
     public String registration(Model model) {
         model.addAttribute("member", new MemberFormDto());
         return "member/registration";
     }
 
+    /**
+     * 회원가입
+     */
     @PostMapping("/registration")
     public String createMember(@Validated @ModelAttribute("member") MemberFormDto memberFormDto, BindingResult bindingResult) {
 

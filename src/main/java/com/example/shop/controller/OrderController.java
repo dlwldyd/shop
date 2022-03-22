@@ -28,6 +28,9 @@ public class OrderController {
 
     private final OrderService orderService;
 
+    /**
+     * 단일 상품 주문
+     */
     @PostMapping("/order")
     @ResponseBody
     public ResponseEntity<String> order(@RequestBody @Validated OrderDto orderDto,
@@ -53,6 +56,9 @@ public class OrderController {
         }
     }
 
+    /**
+     * 주문 내역 화면
+     */
     @GetMapping("/orders")
     public String orderHist(@PageableDefault(size = 4) Pageable pageable, Model model) {
 
@@ -67,6 +73,9 @@ public class OrderController {
         return "order/orderHist";
     }
 
+    /**
+     * 주문 취소
+     */
     @PostMapping("/order/{orderId}/cancel")
     @ResponseBody
     public ResponseEntity<String> cancelOrder(@PathVariable("orderId") Long orderId) {

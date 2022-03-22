@@ -66,6 +66,13 @@ public class Member extends DateBaseEntity {
         this.role = role;
     }
 
+    /**
+     * Member 엔티티 생성을 위한 메서드,
+     * 기본적으로 ROLE_USER 로 생성
+     * @param memberFormDto 회원가입 폼에서 받은 사용자 정보
+     * @param passwordEncoder 패스워드 인코딩을 위한 passwordEncoder
+     * @return 생성된 Member 엔티티를 반환
+     */
     public static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder) {
         return new Member(memberFormDto.getUsername(),
                 memberFormDto.getName(),

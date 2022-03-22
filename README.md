@@ -25,7 +25,8 @@
 <img src="./screenshot/로그인.png">
 
 > 로그인 페이지 입니다.<br>
-> 아이디와 비밀번호를 이용해 로그인이 가능합니다.   
+> 아이디와 비밀번호를 이용해 로그인이 가능합니다.<br>
+> __ADMIN ID__ : admin, __PASSWORD__ : admin   
 ### 상품 등록
 <img src="./screenshot/상품등록.png">
 
@@ -75,6 +76,6 @@
 ## To Do List
 * 계정찾기 기능 추가하기
 * OAuth 기능 구현하기
-* 아임포트 써서 결제기능 구현해보기
+* 결제기능 구현해보기
 * QnA 게시판 만들기
 * remember me 기능 추가하기

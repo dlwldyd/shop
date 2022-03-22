@@ -19,6 +19,9 @@ import java.net.URLEncoder;
 @RequestMapping("/member")
 public class LoginController {
 
+    /**
+     * 로그인 화면
+     */
     @GetMapping("/login")
     public String login(@RequestParam(required = false) String loginException, Model model) throws UnsupportedEncodingException {
         if (loginException != null) {
@@ -27,6 +30,9 @@ public class LoginController {
         return "member/login";
     }
 
+    /**
+     * 로그아웃
+     */
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
 

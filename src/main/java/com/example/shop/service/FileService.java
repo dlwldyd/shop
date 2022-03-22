@@ -11,19 +11,28 @@ import java.io.IOException;
 @Slf4j
 public class FileService {
 
+    /**
+     * 파일을 업로드함
+     * @param imgFullPathName 업로드할 파일 이름(절대경로)
+     * @param itemImgFile 업로드할 파일
+     */
     public void uploadFile(String imgFullPathName, MultipartFile itemImgFile) throws IOException {
 
         itemImgFile.transferTo(new File(imgFullPathName));
     }
 
-    public void deleteFile(String filePath) {
-        File deleteFile = new File(filePath);
+    /**
+     * 파일을 삭제함
+     * @param imgFullPathName 삭제할 파일 이름(절대경로)
+     */
+    public void deleteFile(String imgFullPathName) {
+        File deleteFile = new File(imgFullPathName);
 
         if (deleteFile.exists()) {
             deleteFile.delete();
-            log.info("{} 파일을 삭제하였습니다.", filePath);
+            log.info("{} 파일을 삭제하였습니다.", imgFullPathName);
         } else {
-            log.info("{} 파일이 존재하지 않습니다.", filePath);
+            log.info("{} 파일이 존재하지 않습니다.", imgFullPathName);
         }
     }
 }

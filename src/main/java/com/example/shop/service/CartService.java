@@ -28,6 +28,13 @@ public class CartService {
     private final CartItemRepository cartItemRepository;
     private final OrderService orderService;
 
+    /**
+     * 장바구니에 담기,
+     * 해당 상품이 장바구니에 담겨있으면 개수만 늘리고 없으면 엔티티 생성 후 저장함
+     * @param cartItemDto 상품 id, 상품 개수가 담긴 DTO
+     * @param username 사용자 아이디
+     * @return 데이터베이스에 저장한, 혹은 개수를 늘린 CartItem 엔티티
+     */
     @Transactional
     public CartItem addCart(CartItemDto cartItemDto, String username) {
         Item findItem = itemService.getItem(cartItemDto.getItemId());
@@ -49,6 +56,11 @@ public class CartService {
         }
     }
 
+    /**
+     * 장바구니에 담겨있는 상품의 개수를 수정함
+     * @param cartItemId CartItem 엔티티의 id
+     * @param count 상품 개수
+     */
     @Transactional
     public void updateCartItemCount(Long cartItemId, int count) {
 
@@ -57,12 +69,22 @@ public class CartService {
         cartItem.orElseThrow(EntityNotFoundException::new).updateCount(count);
     }
 
+    /**
+     * 장바구니에 담긴 상품을 삭제함
+     * @param cartItemId CartItem 엔티티의 id
+     */
     @Transactional
     public void deleteCartItem(Long cartItemId) {
         CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
         cartItemRepository.delete(cartItem);
     }
 
+    /**
+     * 장바구니에 담긴 상품을 주문함
+     * @param cartOrderDtoList 주문할 상품의 id 리스트
+     * @param username 사용자 아이디
+     * @return 주문한 결과 생성된 주문 엔티티
+     */
     @Transactional
     public Order orderCartItem(List<CartOrderDto> cartOrderDtoList, String username) {
         List<OrderDto> orderDtoList = new ArrayList<>();
@@ -86,6 +108,11 @@ public class CartService {
         return order;
     }
 
+    /**
+     * 사용자의 이름으로 주문 내역을 검색
+     * @param username 사용자 아이디
+     * @return 사용자의 주문내역 에 대한 정보를 담은 DTO 리스트
+     */
     public List<CartDto> getCartList(String username) {
 
         Member member = memberService.getMemberByUsername(username);
@@ -94,6 +121,12 @@ public class CartService {
         return findCart.isEmpty() ? new ArrayList<>() : cartItemRepository.findCartDtoList(findCart.get().getId());
     }
 
+    /**
+     * 현재 사용자가 CartItem 엔티티를 수정할 수 있는지 검사함
+     * @param cartItemId 수정할 CartItem 엔티티의 id
+     * @param username 사용자 아이디
+     * @return true 면 수정 가능, false 면 수정 불가
+     */
     public boolean validateCartItem(Long cartItemId, String username) {
         Member member = memberService.getMemberByUsername(username);
         Optional<CartItem> cartItem = cartItemRepository.findById(cartItemId);

@@ -44,6 +44,13 @@ public class OrderItem extends DateBaseEntity {
         this.count = count;
     }
 
+    /**
+     * OrderItem 엔티티 생성을 위한 메서드,
+     * 품절상태인 상품일 경우 예외를 발생시킴
+     * @param item OrderItem 과 연관관계에 있는 Item 엔티티
+     * @param count 상품의 개수
+     * @return 생성된 OrderItem 엔티티
+     */
     public static OrderItem createOrderItem(Item item, int count) {
         if (item.getStatus() == ItemStatus.SELL) {
             item.removeStock(count);

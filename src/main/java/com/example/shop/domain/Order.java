@@ -45,6 +45,12 @@ public class Order extends DateBaseEntity {
         orderItem.setOrder(this);
     }
 
+    /**
+     * Order 엔티티를 생성하기 위한 메서드
+     * @param member Order 와 연관관계에 있는 Member 엔티티
+     * @param orderItemList Order 와 연관관계에 있는 OrderItem 의 리스트
+     * @return 생성된 Order 엔티티
+     */
     public static Order createOrder(Member member, List<OrderItem> orderItemList) {
         Order order = new Order(member, LocalDateTime.now(), OrderStatus.ORDER);
         for (OrderItem orderItem : orderItemList) {
@@ -53,6 +59,10 @@ public class Order extends DateBaseEntity {
         return order;
     }
 
+    /**
+     * 총 결제 금액 계산을 위한 메서드
+     * @return 총 결제 금액
+     */
     public int getTotalPrice() {
         int totalPrice = 0;
 

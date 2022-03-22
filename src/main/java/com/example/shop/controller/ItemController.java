@@ -27,12 +27,18 @@ public class ItemController {
 
     private final ItemService itemService;
 
+    /**
+     * 상품 등록 화면
+     */
     @GetMapping("/registration")
     public String register(Model model) {
         model.addAttribute("itemFormDto", new ItemFormDto());
         return "item/registration";
     }
 
+    /**
+     * 상품 등록
+     */
     @PostMapping("/registration")
     public String newItem(@Validated @ModelAttribute ItemFormDto itemFormDto, BindingResult bindingResult) throws IOException {
 
@@ -72,6 +78,9 @@ public class ItemController {
         return "redirect:/";
     }
 
+    /**
+     * 상품 관리 화면
+     */
     @GetMapping("/manage")
     public String itemManage(@ModelAttribute ItemSearchDto itemSearchDto,
                              @PageableDefault(size = 12) Pageable pageable,
@@ -82,6 +91,9 @@ public class ItemController {
         return "item/manage";
     }
 
+    /**
+     * 상품 수정 화면
+     */
     @GetMapping("/edit/{itemId}")
     public String itemEditPage(@PathVariable Long itemId, Model model) {
         try {
@@ -93,6 +105,9 @@ public class ItemController {
         return "item/edit";
     }
 
+    /**
+     * 상품 정보 수정
+     */
     @PostMapping("/edit/{itemId}")
     public String itemEdit(@PathVariable Long itemId,
                            @Validated @ModelAttribute ItemFormDto itemFormDto,
@@ -130,6 +145,9 @@ public class ItemController {
         return "redirect:/item/manage";
     }
 
+    /**
+     * 상품 삭제
+     */
     @GetMapping("/delete/{itemId}")
     public String deleteItem(@PathVariable Long itemId) {
         itemService.deleteItem(itemId);
