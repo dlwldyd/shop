@@ -9,6 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -148,9 +151,10 @@ public class ItemController {
     /**
      * 상품 삭제
      */
-    @GetMapping("/delete/{itemId}")
-    public String deleteItem(@PathVariable Long itemId) {
+    @DeleteMapping("/delete/{itemId}")
+    @ResponseBody
+    public ResponseEntity<String> deleteItem(@PathVariable Long itemId) {
         itemService.deleteItem(itemId);
-        return "redirect:/item/manage";
+        return new ResponseEntity<>(itemId.toString(), HttpStatus.OK);
     }
 }

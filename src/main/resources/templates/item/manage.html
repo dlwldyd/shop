@@ -76,7 +76,7 @@ button {
                         <p class="excerpt" th:text="|재고량 : ${item.stockQuantity}|">1</p>
                         <p class="excerpt" th:text="|상품 등록일 : ${#temporals.format(item.createdDate, 'yyyy-MM-dd HH:mm:ss')}|">상품 등록일</p>
                         <a th:href="@{/item/edit/{id}(id = ${item.id})}" class="read-more-btn">수정 <i class="fas fa-angle-right"></i></a>
-                        <a th:href="@{/item/delete/{id}(id = ${item.id})}" class="read-more-btn">삭제 <i class="fas fa-angle-right"></i></a>
+                        <a th:onclick="'javascript:deleteItem(' + ${item.id} + ')'" class="read-more-btn">삭제 <i class="fas fa-angle-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -133,6 +133,31 @@ button {
         const itemName = document.getElementById("itemName").value;
 
         location.href = "/item/manage/?page=" + page + "&itemStatus=" + itemStatus + "&itemCategory=" + itemCategory + "&itemName=" + itemName;
+    }
+
+    function deleteItem(itemId){
+
+        const token = $("meta[name='_csrf']").attr("content");
+        const header = $("meta[name='_csrf_header']").attr("content");
+
+        const url = "/item/delete/" + itemId;
+
+        $.ajax({
+            url : url,
+            type : "DELETE",
+            beforeSend : function(xhr){
+                xhr.setRequestHeader(header, token);
+            },
+            dataType : "json",
+            cache : false,
+            success : function(result, status){
+                alert("상품이 삭제되었습니다.");
+                location.href='/item/manage';
+            },
+            error : function(jqXHR, status, error){
+                alert(jqXHR.responseJSON.message);
+            }
+        });
     }
 </script>
 <!-- jquery -->
