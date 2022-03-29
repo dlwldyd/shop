@@ -2,11 +2,12 @@
 ## 개발환경
 * spring
 * spring security
+* spring data jpa
+* thymeleaf
 * java
 * javascript
 * ajax
 * h2 database
-* jpa
 * queryDSL
 ## 테이블 구조
 <img src="./table_diagram.drawio.png">
@@ -73,9 +74,3 @@
 > 로그인한 사용자만이 접근할 수 있습니다.<br>
 > 이전에 주문했던 정보를 볼 수 있습니다.<br>
 > 주문 취소 버튼을 통해 주문을 취소할 수 있습니다.
-## To Do List
-* 계정찾기 기능 추가하기
-* OAuth 기능 구현하기
-* 결제기능 구현해보기
-* QnA 게시판 만들기
-* remember me 기능 추가하기
