@@ -13,12 +13,17 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final DataSource dataSource;
     private final UserDetailsService userDetailsService;
     private final AuthenticationSuccessHandler authenticationSuccessHandler;
     private final AuthenticationFailureHandler authenticationFailureHandler;
@@ -26,6 +31,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    @Bean
+    public PersistentTokenRepository tokenRepository() {
+        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+        jdbcTokenRepository.setDataSource(dataSource);
+        return jdbcTokenRepository;
     }
 
     @Override
@@ -53,5 +65,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(authenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler)
                 .permitAll();
+
+        http.rememberMe()
+                .tokenRepository(tokenRepository())
+                .userDetailsService(userDetailsService);
     }
 }

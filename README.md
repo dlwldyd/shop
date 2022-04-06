@@ -10,7 +10,7 @@
 * h2 database
 * queryDSL
 ## 테이블 구조
-<img src="./table_diagram.drawio.png">
+<img src="./table_diagram.png">
 
 ## 주요 기능
 ### 홈 화면
@@ -77,5 +77,5 @@
 ## 추가할 기능
 * 계정 찾기 기능
 * OAuth 기능
-* remember me 기능
+* 마이페이지
 * QnA 게시판
