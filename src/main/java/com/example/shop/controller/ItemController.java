@@ -2,6 +2,7 @@ package com.example.shop.controller;
 
 import com.example.shop.Dtos.item.AdminItemFormDto;
 import com.example.shop.Dtos.item.ItemSearchDto;
+import com.example.shop.exception.DeletedItemException;
 import com.example.shop.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.apache.tika.Tika;

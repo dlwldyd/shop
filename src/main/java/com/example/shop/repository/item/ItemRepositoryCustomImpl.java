@@ -33,7 +33,8 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         List<Item> result = jpaQueryFactory.selectDistinct(item)
                 .from(item)
                 .join(item.itemImgList).fetchJoin()
-                .where(searchItemStatusEq(itemSearchDto.getItemStatus()),
+                .where(item.status.ne(ItemStatus.DELETED),
+                        searchItemStatusEq(itemSearchDto.getItemStatus()),
                         searchItemCategoryEq(itemSearchDto.getItemCategory()),
                         itemNameLike(itemSearchDto.getItemName()))
                 .orderBy(item.id.desc())
@@ -57,7 +58,8 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         List<Item> result = jpaQueryFactory.selectDistinct(item)
                 .from(item)
                 .join(item.itemImgList).fetchJoin()
-                .where(searchItemStatusEq(itemSearchDto.getItemStatus()),
+                .where(item.status.ne(ItemStatus.DELETED),
+                        searchItemStatusEq(itemSearchDto.getItemStatus()),
                         searchItemCategoryEq(itemSearchDto.getItemCategory()),
                         itemNameLike(itemSearchDto.getItemName()))
                 .orderBy(item.id.desc())

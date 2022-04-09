@@ -85,41 +85,40 @@ public class ItemService {
     @Transactional
     public Item updateItem(AdminItemFormDto itemFormDto) throws IOException {
 
-        Optional<Item> item = itemRepository.findById(itemFormDto.getId());
+        Item item = itemRepository.findById(itemFormDto.getId()).orElseThrow(EntityNotFoundException::new);
 
-        if (item.isPresent()) {
+        if (item.getStatus() == ItemStatus.DELETED) {
+            throw new DeletedItemException("삭제된 상품입니다.");
+        }
 
-            if (!itemFormDto.getItemRepImg().isEmpty()) {
+        if (!itemFormDto.getItemRepImg().isEmpty()) {
 
-                MultipartFile itemRepImgFile = itemFormDto.getItemRepImg();
-                String originImgName = itemRepImgFile.getOriginalFilename();
+            MultipartFile itemRepImgFile = itemFormDto.getItemRepImg();
+            String originImgName = itemRepImgFile.getOriginalFilename();
+            String imgName = createStoreFileName(originImgName);
+            String imgUrl = "/images/" + imgName;
+
+            ItemImg itemImg = new ItemImg(imgName, originImgName, imgUrl, true, item);
+            itemImgService.updateItemRepImg(itemImg, itemFormDto.getItemRepImg());
+        }
+        if (itemFormDto.getItemImgs().size() != 1 || !itemFormDto.getItemImgs().get(0).isEmpty()) {
+
+            itemImgService.deleteNonItemRepImg(itemFormDto.getId());
+            for (MultipartFile itemImgFile : itemFormDto.getItemImgs()) {
+
+                String originImgName = itemImgFile.getOriginalFilename();
                 String imgName = createStoreFileName(originImgName);
                 String imgUrl = "/images/" + imgName;
 
-                ItemImg itemImg = new ItemImg(imgName, originImgName, imgUrl, true, item.get());
-                itemImgService.updateItemRepImg(itemImg, itemFormDto.getItemRepImg());
+                ItemImg itemImg = new ItemImg(imgName, originImgName, imgUrl, false, item);
+
+                itemImgService.saveItemImg(itemImg, itemImgFile);
             }
-            if (itemFormDto.getItemImgs().size() != 1 || !itemFormDto.getItemImgs().get(0).isEmpty()) {
-
-                itemImgService.deleteNonItemRepImg(itemFormDto.getId());
-                for (MultipartFile itemImgFile : itemFormDto.getItemImgs()) {
-
-                    String originImgName = itemImgFile.getOriginalFilename();
-                    String imgName = createStoreFileName(originImgName);
-                    String imgUrl = "/images/" + imgName;
-
-                    ItemImg itemImg = new ItemImg(imgName, originImgName, imgUrl, false, item.get());
-
-                    itemImgService.saveItemImg(itemImg, itemImgFile);
-                }
-            }
-
-            item.get().updateItem(itemFormDto);
-
-            return item.get();
         }
 
-        throw new EntityNotFoundException();
+        item.updateItem(itemFormDto);
+
+        return item;
     }
 
     /**

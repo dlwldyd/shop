@@ -15,7 +15,7 @@ import java.util.Optional;
 
 public interface ItemRepository extends JpaRepository<Item, Long>, ItemRepositoryCustom {
 
-    @Query("select distinct i from Item i join fetch i.itemImgList order by i.id desc")
+    @Query("select distinct i from Item i join fetch i.itemImgList where i.status != com.example.shop.enumtype.ItemStatus.DELETED order by i.id desc")
     List<Item> getItemList(Pageable pageable);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
