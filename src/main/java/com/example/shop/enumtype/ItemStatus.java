@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum ItemStatus {
 
-    SELL("판매 중"), SOLD_OUT("품절");
+    SELL("판매 중"), SOLD_OUT("품절"), DELETED("삭제됨");
 
     private final String description;
 }

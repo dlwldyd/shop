@@ -2,7 +2,10 @@ package com.example.shop.controller;
 
 import com.example.shop.Dtos.order.OrderDto;
 import com.example.shop.Dtos.order.OrderHistDto;
+import com.example.shop.builder.ErrorMessageBuilder;
 import com.example.shop.domain.Order;
+import com.example.shop.exception.DeletedItemException;
+import com.example.shop.exception.OutOfStockException;
 import com.example.shop.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -10,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -27,6 +29,7 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
+    private final ErrorMessageBuilder errorMessageBuilder;
 
     /**
      * 단일 상품 주문
@@ -37,12 +40,7 @@ public class OrderController {
                                         BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            StringBuilder sb = new StringBuilder();
-            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-            for (FieldError fieldError : fieldErrors) {
-                sb.append(fieldError.getDefaultMessage());
-            }
-            return new ResponseEntity<String>(sb.toString(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(errorMessageBuilder.buildErrorMessage(bindingResult), HttpStatus.BAD_REQUEST);
         }
 
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -50,9 +48,11 @@ public class OrderController {
 
         try {
             Order order = orderService.order(orderDto, username);
-            return new ResponseEntity<String>(order.getId().toString(), HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(order.getId().toString(), HttpStatus.OK);
+        } catch (OutOfStockException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (DeletedItemException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 

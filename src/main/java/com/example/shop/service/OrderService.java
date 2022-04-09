@@ -4,6 +4,8 @@ import com.example.shop.Dtos.order.OrderDto;
 import com.example.shop.Dtos.order.OrderHistDto;
 import com.example.shop.Dtos.order.OrderItemDto;
 import com.example.shop.domain.*;
+import com.example.shop.enumtype.ItemStatus;
+import com.example.shop.exception.DeletedItemException;
 import com.example.shop.repository.order.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -37,6 +39,9 @@ public class OrderService {
     @Transactional
     public Order order(OrderDto orderDto, String username) {
         Item item = itemService.getItem(orderDto.getItemId());
+        if (item.getStatus() == ItemStatus.DELETED){
+            throw new DeletedItemException("삭제된 상품입니다. : " + item.getItemName());
+        }
         Member member = memberService.getMemberByUsername(username);
 
         List<OrderItem> orderItemList = new ArrayList<>();
@@ -76,6 +81,9 @@ public class OrderService {
 
         for (OrderDto orderDto : orderDtoList) {
             Item item = itemService.getItem(orderDto.getItemId());
+            if (item.getStatus() == ItemStatus.DELETED) {
+                throw new DeletedItemException("삭제된 상품입니다. : " + item.getItemName());
+            }
             OrderItem orderItem = OrderItem.createOrderItem(item, orderDto.getCount());
             orderItemList.add(orderItem);
         }

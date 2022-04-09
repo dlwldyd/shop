@@ -1,6 +1,6 @@
 package com.example.shop.domain;
 
-import com.example.shop.Dtos.item.ItemFormDto;
+import com.example.shop.Dtos.item.AdminItemFormDto;
 import com.example.shop.domain.baseentity.DateBaseEntity;
 import com.example.shop.enumtype.ItemCategory;
 import com.example.shop.enumtype.ItemStatus;
@@ -58,7 +58,7 @@ public class Item extends DateBaseEntity {
         this.category = category;
     }
 
-    public void updateItem(ItemFormDto itemFormDto) {
+    public void updateItem(AdminItemFormDto itemFormDto) {
         this.itemName = itemFormDto.getItemName();
         this.price = itemFormDto.getPrice();
         this.stockQuantity = itemFormDto.getStockQuantity();

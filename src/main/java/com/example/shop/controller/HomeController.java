@@ -1,6 +1,7 @@
 package com.example.shop.controller;
 
-import com.example.shop.Dtos.item.ItemFormDto;
+import com.example.shop.Dtos.item.AdminItemFormDto;
+import com.example.shop.Dtos.item.UserItemFormDto;
 import com.example.shop.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,7 @@ public class HomeController {
      */
     @GetMapping("/")
     public String home(Model model) {
-        List<ItemFormDto> itemList = itemService.getItemList();
+        List<UserItemFormDto> itemList = itemService.getItemList();
         model.addAttribute("items", itemList);
         return "home";
     }

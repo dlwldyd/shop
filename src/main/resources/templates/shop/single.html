@@ -46,7 +46,7 @@
                     <p th:text="*{itemDetails}">상품 상세 설명</p>
                     <div class="single-product-form">
                         <form action="#">
-                            <input id="count" type="number" placeholder="0">
+                            <input id="count" type="number" min="0" placeholder="0">
                         </form>
                         <h3 id="total-price">결제 금액 : 0원</h3>
                         <a type="button" class="cart-btn" onclick="addCart()"><i class="fas fa-shopping-cart"></i> 장바구니에 담기</a>

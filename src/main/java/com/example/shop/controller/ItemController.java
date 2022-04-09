@@ -1,6 +1,6 @@
 package com.example.shop.controller;
 
-import com.example.shop.Dtos.item.ItemFormDto;
+import com.example.shop.Dtos.item.AdminItemFormDto;
 import com.example.shop.Dtos.item.ItemSearchDto;
 import com.example.shop.service.ItemService;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,7 +33,7 @@ public class ItemController {
      */
     @GetMapping("/registration")
     public String register(Model model) {
-        model.addAttribute("itemFormDto", new ItemFormDto());
+        model.addAttribute("itemFormDto", new AdminItemFormDto());
         return "item/registration";
     }
 
@@ -43,30 +41,13 @@ public class ItemController {
      * 상품 등록
      */
     @PostMapping("/registration")
-    public String newItem(@Validated @ModelAttribute ItemFormDto itemFormDto, BindingResult bindingResult) throws IOException {
+    public String newItem(@Validated @ModelAttribute AdminItemFormDto itemFormDto, BindingResult bindingResult) throws IOException {
 
         Tika tika = new Tika();
 
-        if (itemFormDto.getItemRepImg().isEmpty()) {
-            bindingResult.rejectValue("itemRepImg", "noFile");
-        } else {
-            if (!tika.detect(itemFormDto.getItemRepImg().getInputStream()).startsWith("image")) {
-                bindingResult.rejectValue("itemRepImg", "extensionNotMatch");
-            }
-        }
+        repImgCheck(itemFormDto, bindingResult, tika);
 
-        for (MultipartFile itemImg : itemFormDto.getItemImgs()) {
-            if (!itemImg.isEmpty()) {
-                if (!tika.detect(itemImg.getInputStream()).startsWith("image")) {
-                    bindingResult.rejectValue("itemImgs", "extensionNotMatch");
-                    break;
-                }
-            }
-        }
-
-        if (itemFormDto.getItemImgs().size() > 5) {
-            bindingResult.rejectValue("itemImgs", "fileExceed");
-        }
+        nonRepImgCheck(itemFormDto, tika, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return "item/registration";
@@ -88,7 +69,7 @@ public class ItemController {
     public String itemManage(@ModelAttribute ItemSearchDto itemSearchDto,
                              @PageableDefault(size = 12) Pageable pageable,
                              Model model) {
-        Page<ItemFormDto> items = itemService.getAdminItemPage(itemSearchDto, pageable);
+        Page<AdminItemFormDto> items = itemService.getAdminItemPage(itemSearchDto, pageable);
         model.addAttribute("items", items);
         model.addAttribute("maxPage", 5);
         return "item/manage";
@@ -100,7 +81,7 @@ public class ItemController {
     @GetMapping("/edit/{itemId}")
     public String itemEditPage(@PathVariable Long itemId, Model model) {
         try {
-            ItemFormDto itemFormDto = itemService.getAdminItemData(itemId);
+            AdminItemFormDto itemFormDto = itemService.getAdminItemData(itemId);
             model.addAttribute("itemFormDto", itemFormDto);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -113,7 +94,7 @@ public class ItemController {
      */
     @PostMapping("/edit/{itemId}")
     public String itemEdit(@PathVariable Long itemId,
-                           @Validated @ModelAttribute ItemFormDto itemFormDto,
+                           @Validated @ModelAttribute AdminItemFormDto itemFormDto,
                            BindingResult bindingResult) throws IOException {
 
         Tika tika = new Tika();
@@ -122,18 +103,7 @@ public class ItemController {
             bindingResult.rejectValue("itemRepImg", "extensionNotMatch");
         }
 
-        for (MultipartFile itemImg : itemFormDto.getItemImgs()) {
-            if (!itemImg.isEmpty()) {
-                if (!tika.detect(itemImg.getInputStream()).startsWith("image")) {
-                    bindingResult.rejectValue("itemImgs", "extensionNotMatch");
-                    break;
-                }
-            }
-        }
-
-        if (itemFormDto.getItemImgs().size() > 5) {
-            bindingResult.rejectValue("itemImgs", "fileExceed");
-        }
+        nonRepImgCheck(itemFormDto, tika, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return "item/edit/" + itemFormDto.getId().toString();
@@ -156,5 +126,36 @@ public class ItemController {
     public ResponseEntity<String> deleteItem(@PathVariable Long itemId) {
         itemService.deleteItem(itemId);
         return new ResponseEntity<>(itemId.toString(), HttpStatus.OK);
+    }
+
+    /**
+     * 상품 대표이미지 유무와 이미지의 확장자를 검사하는 메서드
+     */
+    private void repImgCheck(AdminItemFormDto itemFormDto, BindingResult bindingResult, Tika tika) throws IOException {
+        if (itemFormDto.getItemRepImg().isEmpty()) {
+            bindingResult.rejectValue("itemRepImg", "noFile");
+        } else {
+            if (!tika.detect(itemFormDto.getItemRepImg().getInputStream()).startsWith("image")) {
+                bindingResult.rejectValue("itemRepImg", "extensionNotMatch");
+            }
+        }
+    }
+
+    /**
+     * 상품 대표이미지가 아닌 이미지의 확장자와 이미지 개수를 검사하는 메서드
+     */
+    private void nonRepImgCheck(AdminItemFormDto itemFormDto, Tika tika, BindingResult bindingResult) throws IOException {
+        for (MultipartFile itemImg : itemFormDto.getItemImgs()) {
+            if (!itemImg.isEmpty()) {
+                if (!tika.detect(itemImg.getInputStream()).startsWith("image")) {
+                    bindingResult.rejectValue("itemImgs", "extensionNotMatch");
+                    break;
+                }
+            }
+        }
+
+        if (itemFormDto.getItemImgs().size() > 5) {
+            bindingResult.rejectValue("itemImgs", "fileExceed");
+        }
     }
 }

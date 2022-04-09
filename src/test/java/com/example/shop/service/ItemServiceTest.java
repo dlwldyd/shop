@@ -1,6 +1,6 @@
 package com.example.shop.service;
 
-import com.example.shop.Dtos.item.ItemFormDto;
+import com.example.shop.Dtos.item.AdminItemFormDto;
 import com.example.shop.domain.Item;
 import com.example.shop.domain.ItemImg;
 import com.example.shop.enumtype.ItemCategory;
@@ -40,7 +40,7 @@ class ItemServiceTest {
         String itemDetails = "아이템";
         ItemStatus status = ItemStatus.SELL;
         ItemCategory itemCategory = ItemCategory.LAPTOP;
-        ItemFormDto itemFormDto = new ItemFormDto(itemName, price, itemDetails, stockQuantity, status, itemCategory);
+        AdminItemFormDto itemFormDto = new AdminItemFormDto(itemName, price, itemDetails, stockQuantity, status, itemCategory);
         String fileName = "test";
         String contentType = "jpg";
         String path = "C:/shop/item/tikaTestFile.jpg";

@@ -36,17 +36,6 @@ public class ItemImgService {
     }
 
     /**
-     * 상품의 모든 ItemImg 엔티티와 이미지 파일을 삭제함
-     * @param itemId 삭제할 상품의 id
-     */
-    @Transactional
-    public void deleteAllItemImg(Long itemId) {
-        List<ItemImg> findItemImg = itemImgRepository.findItemImgByItemId(itemId);
-        findItemImg.forEach(itemImg -> fileService.deleteFile(imgFullPath(itemImg.getImgName())));
-        itemImgRepository.deleteItemImgByItemId(itemId);
-    }
-
-    /**
      * 상품 대표 이미지를 제외한 모든 ItemImg 엔티티를 삭제하고
      * 상품 대표 이미지를 제외한 모든 이미지 파일을 삭제함
      * @param itemId 삭제할 상품의 id

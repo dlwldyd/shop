@@ -1,6 +1,6 @@
 package com.example.shop.repository.item;
 
-import com.example.shop.Dtos.item.ItemFormDto;
+import com.example.shop.Dtos.item.AdminItemFormDto;
 import com.example.shop.Dtos.item.ItemSearchDto;
 import com.example.shop.domain.Item;
 import com.example.shop.domain.ItemImg;
@@ -61,10 +61,10 @@ class ItemRepositoryCustomImplTest {
         itemSearchDtoName.setItemName("이름1");
         Pageable pageable = PageRequest.of(1, 8);
 
-        Page<ItemFormDto> itemPageSell = itemRepository.getAdminItemPage(itemSearchDtoSell, pageable);
-        Page<ItemFormDto> itemPageAll = itemRepository.getAdminItemPage(itemSearchDtoAll, pageable);
-        Page<ItemFormDto> itemPageSoldOut = itemRepository.getAdminItemPage(itemSearchDtoSoldOut, pageable);
-        Page<ItemFormDto> itemPageName = itemRepository.getAdminItemPage(itemSearchDtoName, pageable);
+        Page<AdminItemFormDto> itemPageSell = itemRepository.getAdminItemPage(itemSearchDtoSell, pageable);
+        Page<AdminItemFormDto> itemPageAll = itemRepository.getAdminItemPage(itemSearchDtoAll, pageable);
+        Page<AdminItemFormDto> itemPageSoldOut = itemRepository.getAdminItemPage(itemSearchDtoSoldOut, pageable);
+        Page<AdminItemFormDto> itemPageName = itemRepository.getAdminItemPage(itemSearchDtoName, pageable);
 
         assertThat(itemPageSell.getContent().size()).isEqualTo(2);
         assertThat(itemPageSoldOut.getContent().size()).isEqualTo(2);

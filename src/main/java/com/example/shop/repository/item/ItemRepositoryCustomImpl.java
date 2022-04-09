@@ -1,7 +1,8 @@
 package com.example.shop.repository.item;
 
-import com.example.shop.Dtos.item.ItemFormDto;
+import com.example.shop.Dtos.item.AdminItemFormDto;
 import com.example.shop.Dtos.item.ItemSearchDto;
+import com.example.shop.Dtos.item.UserItemFormDto;
 import com.example.shop.domain.Item;
 import com.example.shop.enumtype.ItemCategory;
 import com.example.shop.enumtype.ItemStatus;
@@ -27,7 +28,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
     }
 
     @Override
-    public Page<ItemFormDto> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+    public Page<AdminItemFormDto> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
 
         List<Item> result = jpaQueryFactory.selectDistinct(item)
                 .from(item)
@@ -48,11 +49,11 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
 
         Page<Item> page = PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
 
-        return page.map(ItemFormDto::adminDtoOf);
+        return page.map(AdminItemFormDto::of);
     }
 
     @Override
-    public Page<ItemFormDto> getItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+    public Page<UserItemFormDto> getItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
         List<Item> result = jpaQueryFactory.selectDistinct(item)
                 .from(item)
                 .join(item.itemImgList).fetchJoin()
@@ -72,7 +73,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
 
         Page<Item> page = PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
 
-        return page.map(ItemFormDto::of);
+        return page.map(UserItemFormDto::of);
     }
 
     private BooleanExpression searchItemCategoryEq(ItemCategory itemCategory) {

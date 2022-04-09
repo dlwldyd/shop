@@ -1,10 +1,10 @@
 package com.example.shop.service;
 
-import com.example.shop.Dtos.item.ItemFormDto;
-import com.example.shop.Dtos.item.ItemImgDto;
-import com.example.shop.Dtos.item.ItemSearchDto;
+import com.example.shop.Dtos.item.*;
 import com.example.shop.domain.Item;
 import com.example.shop.domain.ItemImg;
+import com.example.shop.enumtype.ItemStatus;
+import com.example.shop.exception.DeletedItemException;
 import com.example.shop.repository.item.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -37,7 +37,7 @@ public class ItemService {
      * @return 데이터베이스에 저장된 상품을 반환
      */
     @Transactional
-    public Item saveItem(ItemFormDto itemFormDto) throws IOException {
+    public Item saveItem(AdminItemFormDto itemFormDto) throws IOException {
 
         Item savedItem = itemRepository.save(itemFormDto.createItem());
 
@@ -70,8 +70,9 @@ public class ItemService {
      */
     @Transactional
     public void deleteItem(Long itemId) {
-        itemImgService.deleteAllItemImg(itemId);
-        itemRepository.deleteById(itemId);
+        itemImgService.deleteNonItemRepImg(itemId);
+        Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
+        item.setStatus(ItemStatus.DELETED);
     }
 
     /**
@@ -82,7 +83,7 @@ public class ItemService {
      * @return 수정된 상품 엔티티가 반환
      */
     @Transactional
-    public Item updateItem(ItemFormDto itemFormDto) throws IOException {
+    public Item updateItem(AdminItemFormDto itemFormDto) throws IOException {
 
         Optional<Item> item = itemRepository.findById(itemFormDto.getId());
 
@@ -127,7 +128,7 @@ public class ItemService {
      * @param itemSearchDto 검색 조건
      * @param pageable 페이징
      */
-    public Page<ItemFormDto> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+    public Page<AdminItemFormDto> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
         return itemRepository.getAdminItemPage(itemSearchDto, pageable);
     }
 
@@ -137,7 +138,7 @@ public class ItemService {
      * @param itemSearchDto 검색 조건
      * @param pageable 페이징
      */
-    public Page<ItemFormDto> getItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+    public Page<UserItemFormDto> getItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
         return itemRepository.getItemPage(itemSearchDto, pageable);
     }
 
@@ -145,11 +146,11 @@ public class ItemService {
      * 홈 화면에서 상품을 표시하기 위한 용도,
      * 3개의 상품에 대한 정보가 있는 List 를 반환함
      */
-    public List<ItemFormDto> getItemList() {
+    public List<UserItemFormDto> getItemList() {
         Pageable pageable = PageRequest.of(0, 3);
         List<Item> itemList = itemRepository.getItemList(pageable);
 
-        return itemList.stream().map(ItemFormDto::of).collect(Collectors.toList());
+        return itemList.stream().map(UserItemFormDto::of).collect(Collectors.toList());
     }
 
     /**
@@ -158,28 +159,17 @@ public class ItemService {
      * @param itemId 상품 id
      * @return 상품에 대한 정보를 담은 ItemFormDto
      */
-    public ItemFormDto getAdminItemData(Long itemId) {
+    public AdminItemFormDto getAdminItemData(Long itemId) {
 
-        Optional<Item> findItem = itemRepository.findById(itemId);
+        Item findItem = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
 
-        if (findItem.isPresent()) {
-            ItemImg itemRepImg = itemImgService.getItemRepImg(itemId);
-            List<ItemImg> itemImgList = itemImgService.getItemImgList(itemId);
+        ItemImg itemRepImg = itemImgService.getItemRepImg(itemId);
+        List<ItemImgDto> itemImgDtoList = getItemNonRepImg(itemId);
 
-            List<ItemImgDto> itemImgDtoList = new ArrayList<>();
-
-            for (ItemImg itemImg : itemImgList) {
-                ItemImgDto itemImgDto = ItemImgDto.of(itemImg);
-                itemImgDtoList.add(itemImgDto);
-            }
-
-            ItemFormDto itemFormDto = ItemFormDto.adminDtoOf(findItem.get());
-            itemFormDto.setItemRepImgDto(ItemImgDto.of(itemRepImg));
-            itemFormDto.setItemImgDtoList(itemImgDtoList);
-            return itemFormDto;
-        }else{
-            throw new EntityNotFoundException();
-        }
+        AdminItemFormDto itemFormDto = AdminItemFormDto.of(findItem);
+        itemFormDto.setItemRepImgDto(ItemImgDto.of(itemRepImg));
+        itemFormDto.setItemImgDtoList(itemImgDtoList);
+        return itemFormDto;
     }
 
     /**
@@ -188,28 +178,21 @@ public class ItemService {
      * @param itemId 상품 id
      * @return 상품에 대한 정보를 담은 ItemFormDto
      */
-    public ItemFormDto getItemData(Long itemId) {
+    public UserItemFormDto getItemData(Long itemId) {
 
-        Optional<Item> findItem = itemRepository.findById(itemId);
+        Item findItem = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
 
-        if (findItem.isPresent()) {
-            ItemImg itemRepImg = itemImgService.getItemRepImg(itemId);
-            List<ItemImg> itemImgList = itemImgService.getItemImgList(itemId);
-
-            List<ItemImgDto> itemImgDtoList = new ArrayList<>();
-
-            for (ItemImg itemImg : itemImgList) {
-                ItemImgDto itemImgDto = ItemImgDto.of(itemImg);
-                itemImgDtoList.add(itemImgDto);
-            }
-
-            ItemFormDto itemFormDto = ItemFormDto.of(findItem.get());
-            itemFormDto.setItemRepImgDto(ItemImgDto.of(itemRepImg));
-            itemFormDto.setItemImgDtoList(itemImgDtoList);
-            return itemFormDto;
-        }else{
-            throw new EntityNotFoundException();
+        if (findItem.getStatus() == ItemStatus.DELETED) {
+            throw new DeletedItemException("삭제된 상품입니다.");
         }
+
+        ItemImg itemRepImg = itemImgService.getItemRepImg(itemId);
+        List<ItemImgDto> itemImgDtoList = getItemNonRepImg(itemId);
+
+        UserItemFormDto itemFormDto = UserItemFormDto.of(findItem);
+        itemFormDto.setItemRepImgDto(ItemImgDto.of(itemRepImg));
+        itemFormDto.setItemImgDtoList(itemImgDtoList);
+        return itemFormDto;
     }
 
     public Item getItem(Long itemId) {
@@ -227,6 +210,22 @@ public class ItemService {
         String ext = extractExt(originalFilename);
 
         return uuid + ext;
+    }
+
+    /**
+     * 상품 대표 이미지를 제외한 상품이미지를 넣은 리스트 반환
+     * @param itemId 상품 아이디
+     */
+    private List<ItemImgDto> getItemNonRepImg(Long itemId) {
+        List<ItemImgDto> itemImgDtoList = new ArrayList<>();
+
+        List<ItemImg> itemImgList = itemImgService.getItemImgList(itemId);
+
+        for (ItemImg itemImg : itemImgList) {
+            ItemImgDto itemImgDto = ItemImgDto.of(itemImg);
+            itemImgDtoList.add(itemImgDto);
+        }
+        return itemImgDtoList;
     }
 
     /**

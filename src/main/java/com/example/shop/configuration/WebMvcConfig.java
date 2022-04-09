@@ -1,6 +1,9 @@
 package com.example.shop.configuration;
 
+import com.example.shop.builder.ErrorMessageBuilder;
+import com.example.shop.builder.ErrorMessageBuilderImpl;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -17,5 +20,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/images/**")
                 .addResourceLocations(uploadPath);
+    }
+
+    @Bean
+    public ErrorMessageBuilder errorMessageBuilder() {
+        return new ErrorMessageBuilderImpl();
     }
 }
