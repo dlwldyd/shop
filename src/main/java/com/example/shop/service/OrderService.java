@@ -38,7 +38,7 @@ public class OrderService {
      */
     @Transactional
     public Order order(OrderDto orderDto, String username) {
-        Item item = itemService.getItem(orderDto.getItemId());
+        Item item = itemService.getItemForUpdateStock(orderDto.getItemId());
         if (item.getStatus() == ItemStatus.DELETED){
             throw new DeletedItemException("삭제된 상품입니다. : " + item.getItemName());
         }
@@ -60,11 +60,11 @@ public class OrderService {
      */
     @Transactional
     public void cancelOrder(Long orderId) {
-        Optional<Order> order = orderRepository.findById(orderId);
-        if (order.isEmpty()) {
-            throw new EntityNotFoundException();
-        }
-        order.get().cancelOrder();
+        Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
+        order.getOrderItems().forEach(orderItem -> {
+            Item item = itemService.getItemForUpdateStock(orderItem.getItem().getId());
+            item.addStock(orderItem.getCount());
+        });
     }
 
     /**
@@ -80,7 +80,7 @@ public class OrderService {
         List<OrderItem> orderItemList = new ArrayList<>();
 
         for (OrderDto orderDto : orderDtoList) {
-            Item item = itemService.getItem(orderDto.getItemId());
+            Item item = itemService.getItemForUpdateStock(orderDto.getItemId());
             if (item.getStatus() == ItemStatus.DELETED) {
                 throw new DeletedItemException("삭제된 상품입니다. : " + item.getItemName());
             }

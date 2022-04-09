@@ -59,8 +59,4 @@ public class OrderItem extends DateBaseEntity {
             throw new SoldOutException("해당 상품은 품절되었습니다.");
         }
     }
-
-    public void cancel() {
-        this.getItem().addStock(count);
-    }
 }

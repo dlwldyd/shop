@@ -8,6 +8,9 @@ import com.example.shop.exception.OutOfStockException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.QueryHints;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,6 +19,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicUpdate
 public class Item extends DateBaseEntity {
 
     @Id

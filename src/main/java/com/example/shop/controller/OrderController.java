@@ -18,11 +18,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -43,8 +40,7 @@ public class OrderController {
             return new ResponseEntity<>(errorMessageBuilder.buildErrorMessage(bindingResult), HttpStatus.BAD_REQUEST);
         }
 
-        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = principal.getUsername();
+        String username = getUsername();
 
         try {
             Order order = orderService.order(orderDto, username);
@@ -62,8 +58,7 @@ public class OrderController {
     @GetMapping("/orders")
     public String orderHist(@PageableDefault(size = 4) Pageable pageable, Model model) {
 
-        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = principal.getUsername();
+        String username = getUsername();
         Page<OrderHistDto> orderHistDtos = orderService.getOrderList(username, pageable);
 
         model.addAttribute("orders", orderHistDtos);
@@ -80,8 +75,7 @@ public class OrderController {
     @ResponseBody
     public ResponseEntity<String> cancelOrder(@PathVariable("orderId") Long orderId) {
 
-        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = principal.getUsername();
+        String username = getUsername();
 
         if (!orderService.validateOrder(orderId, username)) {
             return new ResponseEntity<String>("주문 취소 권한이 없습니다.", HttpStatus.FORBIDDEN);
@@ -89,5 +83,15 @@ public class OrderController {
 
         orderService.cancelOrder(orderId);
         return new ResponseEntity<String>(orderId.toString(), HttpStatus.OK);
+    }
+
+    /**
+     * 사용자의 아이디를 가져오는 메서드
+     * @return 사용자의 아이디
+     */
+    private String getUsername() {
+        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.getUsername();
+        return username;
     }
 }

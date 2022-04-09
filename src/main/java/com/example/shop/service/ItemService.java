@@ -197,7 +197,12 @@ public class ItemService {
 
     public Item getItem(Long itemId) {
 
-        return itemRepository.findById(itemId).orElseThrow(() -> new EntityNotFoundException("그런 상품이 없습니다."));
+        return itemRepository.findById(itemId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 상품입니다."));
+    }
+
+    public Item getItemForUpdateStock(Long itemId) {
+
+        return itemRepository.findByIdForUpdateStock(itemId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 상품입니다."));
     }
 
     /**
