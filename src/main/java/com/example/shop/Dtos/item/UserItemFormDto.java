@@ -70,24 +70,6 @@ public class UserItemFormDto {
     }
 
     /**
-     * ItemFormDto 객체를 Item 객체로 변환하는 메서드
-     * @return 변환된 Item 객체
-     */
-    public final Item createItem() {
-        Item item = new Item(this.getItemName(),
-                this.getPrice(),
-                this.getStockQuantity(),
-                this.getStatus(),
-                this.getCategory(),
-                this.getItemDetails());
-
-        if (item.getStockQuantity() == 0) {
-            item.setStatus(ItemStatus.SOLD_OUT);
-        }
-        return item;
-    }
-
-    /**
      * Item 객체를 ItemFormDto 객체로 변환하는 메서드,
      * createdDate, lastModifiedDate 는 제외시킴
      * @param item 변환할 Item 객체

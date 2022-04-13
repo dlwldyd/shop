@@ -21,9 +21,4 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/images/**")
                 .addResourceLocations(uploadPath);
     }
-
-    @Bean
-    public ErrorMessageBuilder errorMessageBuilder() {
-        return new ErrorMessageBuilderImpl();
-    }
 }

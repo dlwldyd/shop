@@ -1,6 +1,7 @@
 package com.example.shop.security.configuration;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -15,7 +16,9 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
+import javax.servlet.http.HttpSessionListener;
 import javax.sql.DataSource;
 
 @Configuration
@@ -38,6 +41,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
         jdbcTokenRepository.setDataSource(dataSource);
         return jdbcTokenRepository;
+    }
+
+    @Bean
+    public static ServletListenerRegistrationBean<HttpSessionListener> httpSessionEventPublisher() {
+        return new ServletListenerRegistrationBean<>(new HttpSessionEventPublisher());
     }
 
     @Override
@@ -69,5 +77,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.rememberMe()
                 .tokenRepository(tokenRepository())
                 .userDetailsService(userDetailsService);
+
+        http.sessionManagement()
+                .maximumSessions(1);
     }
 }
