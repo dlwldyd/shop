@@ -96,7 +96,6 @@
     function cancelOrder(orderId){
         const token = $("meta[name='_csrf']").attr("content");
         const header = $("meta[name='_csrf_header']").attr("content");
-        console.log(orderId);
 
         const url = "/order/" + orderId + "/cancel";
         const paramData = {
@@ -113,11 +112,11 @@
             beforeSend : function(xhr){
                 xhr.setRequestHeader(header, token);
             },
-            dataType : "json",
+            dataType : "text",
             cache : false,
             success : function(result, status){
-                alert("주문이 취소 되었습니다.")
-                location.href = '/orders'
+                alert(result);
+                location.href = '/orders';
             },
             error : function(jqXHR, status, error){
                 if(jqXHR.status == '401'){

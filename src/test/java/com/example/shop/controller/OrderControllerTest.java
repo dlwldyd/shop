@@ -17,6 +17,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 
+import java.io.IOException;
+import java.security.Principal;
+
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -42,13 +45,13 @@ class OrderControllerTest {
     private UserDetails userDetails;
 
     @Test
-    void controllerTest() {
+    void controllerTest() throws IOException {
 
         MockedStatic<SecurityContextHolder> mSecurityContextHolder = mockStatic(SecurityContextHolder.class);
 
         when(bindingResult.hasErrors()).thenReturn(false);
         when(order.getId()).thenReturn(5L);
-        when(orderService.order(any(), any())).thenReturn(order);
+        when(orderService.order(any(), any(), anyLong())).thenReturn(order);
         when(SecurityContextHolder.getContext()).thenReturn(securityContext);
         when(securityContext.getAuthentication()).thenReturn(new UsernamePasswordAuthenticationToken(userDetails, null));
         when(userDetails.getUsername()).thenReturn("홍길동");
@@ -57,7 +60,7 @@ class OrderControllerTest {
         orderDto.setItemId(5L);
         orderDto.setCount(5);
 
-        ResponseEntity<String> result = orderController.order(orderDto, bindingResult);
+        ResponseEntity<String> result = orderController.order(orderDto, bindingResult, (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(result.getBody()).isEqualTo("5");

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -81,27 +82,32 @@ public class CartService {
 
     /**
      * 장바구니에 담긴 상품을 주문함
-     * @param cartOrderDtoList 주문할 상품의 id 리스트
+     * @param cartOrderDto 주문할 상품목록 및 결제 정보
      * @param username 사용자 아이디
+     * @param totalPrice 결제 금액
      * @return 주문한 결과 생성된 주문 엔티티
      */
     @Transactional
-    public Order orderCartItem(List<CartOrderDto> cartOrderDtoList, String username) {
+    public Order orderCartItem(CartOrderDto cartOrderDto, String username, long totalPrice) throws IOException {
         List<OrderDto> orderDtoList = new ArrayList<>();
 
-        for (CartOrderDto cartOrderDto : cartOrderDtoList) {
-            CartItem cartItem = cartItemRepository.findById(cartOrderDto.getCartItemId()).orElseThrow(EntityNotFoundException::new);
+        List<Long> cartItemIdList = cartOrderDto.getCartItemIdList();
+
+        List<CartItem> cartItemList = cartItemRepository.findCartItemListById(cartItemIdList);
+
+        for (CartItem cartItem : cartItemList) {
 
             OrderDto orderDto = new OrderDto();
             orderDto.setItemId(cartItem.getItem().getId());
             orderDto.setCount(cartItem.getCount());
+
             orderDtoList.add(orderDto);
         }
 
-        Order order = orderService.orders(orderDtoList, username);
+        Order order = orderService.orders(orderDtoList, username, cartOrderDto.getMerchantUid(), cartOrderDto.getImpUid(), totalPrice);
 
-        for (CartOrderDto cartOrderDto : cartOrderDtoList) {
-            CartItem cartItem = cartItemRepository.findById(cartOrderDto.getCartItemId()).orElseThrow(EntityNotFoundException::new);
+        for(Long cartItemId : cartItemIdList) {
+            CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
             cartItemRepository.delete(cartItem);
         }
 

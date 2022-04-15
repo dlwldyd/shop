@@ -31,12 +31,25 @@ public class Order extends DateBaseEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
+    private String merchantUid;
+
+    private String impUid;
+
+    private long totalPrice;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    public Order(Member member, LocalDateTime orderDate, OrderStatus orderStatus) {
+    public Order(Member member, LocalDateTime orderDate, OrderStatus orderStatus, String merchantUid, String impUid, long totalPrice) {
         this.member = member;
         this.orderDate = orderDate;
+        this.orderStatus = orderStatus;
+        this.merchantUid = merchantUid;
+        this.impUid = impUid;
+        this.totalPrice = totalPrice;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
 
@@ -49,10 +62,12 @@ public class Order extends DateBaseEntity {
      * Order 엔티티를 생성하기 위한 메서드
      * @param member Order 와 연관관계에 있는 Member 엔티티
      * @param orderItemList Order 와 연관관계에 있는 OrderItem 의 리스트
+     * @param merchantUid 주문 번호
+     * @param pgUid PG 사측 결제 번호
      * @return 생성된 Order 엔티티
      */
-    public static Order createOrder(Member member, List<OrderItem> orderItemList) {
-        Order order = new Order(member, LocalDateTime.now(), OrderStatus.ORDER);
+    public static Order createOrder(Member member, List<OrderItem> orderItemList, String merchantUid, String pgUid, long totalPrice) {
+        Order order = new Order(member, LocalDateTime.now(), OrderStatus.ORDER, merchantUid, pgUid, totalPrice);
         for (OrderItem orderItem : orderItemList) {
             order.addOrderItem(orderItem);
         }

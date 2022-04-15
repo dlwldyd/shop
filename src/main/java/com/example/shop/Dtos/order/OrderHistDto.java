@@ -21,16 +21,19 @@ public class OrderHistDto {
 
     private int totalPrice = 0;
 
+    private String merchantUid;
+
     private List<OrderItemDto> orderItemDtoList = new ArrayList<>();
 
     public OrderHistDto(Order order) {
         this.orderId = order.getId();
         this.orderDate = order.getOrderDate();
         this.orderStatus = order.getOrderStatus();
+        this.merchantUid = order.getMerchantUid();
     }
 
     public void addOrderItemDto(OrderItemDto orderItemDto) {
-        orderItemDtoList.add(orderItemDto);
+        this.orderItemDtoList.add(orderItemDto);
         this.totalPrice += orderItemDto.getTotalPrice();
     }
 }
