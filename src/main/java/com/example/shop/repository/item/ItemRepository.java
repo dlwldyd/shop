@@ -22,4 +22,9 @@ public interface ItemRepository extends JpaRepository<Item, Long>, ItemRepositor
     @QueryHints(@QueryHint(name = "javax.persistence.lock.timeout", value ="5000"))
     @Query("select i from Item i where i.id = :itemId")
     Optional<Item> findByIdForUpdateStock(@Param("itemId") Long itemId);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @QueryHints(@QueryHint(name = "javax.persistence.lock.timeout", value ="5000"))
+    @Query("select i from Item i where i.id in (:itemIdList) order by i.id")
+    List<Item> findItemListForUpdateStock(@Param("itemIdList") List<Long> itemIdList);
 }

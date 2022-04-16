@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -93,14 +94,34 @@ public class OrderService {
 
         Member member = memberService.getMemberByUsername(username);
         List<OrderItem> orderItemList = new ArrayList<>();
+        List<Long> itemIdList = new ArrayList<>();
+
+        orderDtoList.sort((o1, o2) -> {
+            if (o1.getItemId().equals(o2.getItemId())) {
+                return 0;
+            } else if (o1.getItemId() > o2.getItemId()) {
+                return 1;
+            } else {
+                return -1;
+            }
+        });
+        orderDtoList.forEach(orderDto -> itemIdList.add(orderDto.getItemId()));
+
+        List<Item> itemList = itemService.getItemListForUpdateStock(itemIdList);
 
         try {
-            for (OrderDto orderDto : orderDtoList) {
-                Item item = itemService.getItemForUpdateStock(orderDto.getItemId());
+            if (itemList.size() != itemIdList.size()) {
+                throw new EntityNotFoundException("존재하지 않는 상품을 주문했습니다.");
+            }
+            for (int i = 0; i < itemIdList.size(); i++) {
+                if (!itemList.get(i).getId().equals(itemIdList.get(i))) {
+                    throw new EntityNotFoundException("잘못된 데이터 조회");
+                }
+                Item item = itemList.get(i);
                 if (item.getStatus() == ItemStatus.DELETED) {
                     throw new DeletedItemException("삭제된 상품입니다. : " + item.getItemName());
                 }
-                OrderItem orderItem = OrderItem.createOrderItem(item, orderDto.getCount());
+                OrderItem orderItem = OrderItem.createOrderItem(item, orderDtoList.get(i).getCount());
                 orderItemList.add(orderItem);
             }
 

@@ -13,6 +13,7 @@ import com.example.shop.repository.item.ItemRepository;
 import com.example.shop.repository.order.OrderRepository;
 import com.example.shop.service.payment.PaymentService;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -43,9 +44,6 @@ class OrderServiceTest2 {
 
     @Autowired
     private ItemRepository itemRepository;
-
-    @Autowired
-    private EntityManager em;
 
     @MockBean
     private PaymentService paymentService;
@@ -88,7 +86,7 @@ class OrderServiceTest2 {
 
     @Test
     @Rollback(false)
-    void ordersTest() throws IOException {
+    void ordersTest1() throws IOException {
         itemRepository.save(new Item("맥북", 1000, 100, ItemStatus.SELL, ItemCategory.LAPTOP, "asldkfj"));
         itemRepository.save(new Item("맥북", 1000, 100, ItemStatus.DELETED, ItemCategory.LAPTOP, "asldkfj"));
         itemRepository.save(new Item("맥북", 1000, 100, ItemStatus.SELL, ItemCategory.LAPTOP, "asldkfj"));
@@ -128,5 +126,93 @@ class OrderServiceTest2 {
         doNothing().when(paymentService).outOfStock(anyString());
 
         assertThatThrownBy(() -> orderService.orders(orderDtoList, "admin", "tmp", "tmp", 1003000)).isInstanceOf(DeletedItemException.class);
+    }
+
+    @Test
+    @Rollback(false)
+    void ordersTest2() throws IOException {
+        itemRepository.save(new Item("맥북", 1000, 100, ItemStatus.SELL, ItemCategory.LAPTOP, "asldkfj"));
+        itemRepository.save(new Item("맥북", 1000, 100, ItemStatus.SELL, ItemCategory.LAPTOP, "asldkfj"));
+        itemRepository.save(new Item("맥북", 1000, 100, ItemStatus.SELL, ItemCategory.LAPTOP, "asldkfj"));
+        itemRepository.save(new Item("맥북", 1000, 100, ItemStatus.SELL, ItemCategory.LAPTOP, "asldkfj"));
+
+        List<OrderDto> orderDtoList = new ArrayList<>();
+
+        OrderDto orderDto1 = new OrderDto();
+        orderDto1.setItemId(2L);
+        orderDto1.setImpUid("tmp");
+        orderDto1.setMerchantUid("tmp");
+        orderDto1.setCount(10);
+
+        OrderDto orderDto2 = new OrderDto();
+        orderDto2.setItemId(3L);
+        orderDto2.setImpUid("tmp");
+        orderDto2.setMerchantUid("tmp");
+        orderDto2.setCount(10);
+
+        OrderDto orderDto3 = new OrderDto();
+        orderDto3.setItemId(4L);
+        orderDto3.setImpUid("tmp");
+        orderDto3.setMerchantUid("tmp");
+        orderDto3.setCount(10);
+
+        OrderDto orderDto4 = new OrderDto();
+        orderDto4.setItemId(5L);
+        orderDto4.setImpUid("tmp");
+        orderDto4.setMerchantUid("tmp");
+        orderDto4.setCount(1000);
+
+        orderDtoList.add(orderDto1);
+        orderDtoList.add(orderDto2);
+        orderDtoList.add(orderDto3);
+        orderDtoList.add(orderDto4);
+
+        doNothing().when(paymentService).outOfStock(anyString());
+
+        assertThatThrownBy(() -> orderService.orders(orderDtoList, "admin", "tmp", "tmp", 1003000)).isInstanceOf(OutOfStockException.class);
+    }
+
+    @Test
+    @Rollback(false)
+    void ordersTest3() throws IOException {
+        itemRepository.save(new Item("맥북", 1000, 100, ItemStatus.SELL, ItemCategory.LAPTOP, "asldkfj"));
+        itemRepository.save(new Item("맥북", 1000, 100, ItemStatus.SELL, ItemCategory.LAPTOP, "asldkfj"));
+        itemRepository.save(new Item("맥북", 1000, 100, ItemStatus.SELL, ItemCategory.LAPTOP, "asldkfj"));
+        itemRepository.save(new Item("맥북", 1000, 100, ItemStatus.SELL, ItemCategory.LAPTOP, "asldkfj"));
+
+        List<OrderDto> orderDtoList = new ArrayList<>();
+
+        OrderDto orderDto1 = new OrderDto();
+        orderDto1.setItemId(2L);
+        orderDto1.setImpUid("tmp");
+        orderDto1.setMerchantUid("tmp");
+        orderDto1.setCount(20);
+
+        OrderDto orderDto2 = new OrderDto();
+        orderDto2.setItemId(3L);
+        orderDto2.setImpUid("tmp");
+        orderDto2.setMerchantUid("tmp");
+        orderDto2.setCount(30);
+
+        OrderDto orderDto3 = new OrderDto();
+        orderDto3.setItemId(4L);
+        orderDto3.setImpUid("tmp");
+        orderDto3.setMerchantUid("tmp");
+        orderDto3.setCount(40);
+
+        OrderDto orderDto4 = new OrderDto();
+        orderDto4.setItemId(5L);
+        orderDto4.setImpUid("tmp");
+        orderDto4.setMerchantUid("tmp");
+        orderDto4.setCount(50);
+
+        orderDtoList.add(orderDto1);
+        orderDtoList.add(orderDto2);
+        orderDtoList.add(orderDto3);
+        orderDtoList.add(orderDto4);
+
+        doNothing().when(paymentService).outOfStock(anyString());
+
+        orderService.orders(orderDtoList, "admin", "tmp", "tmp", 1003000);
     }
 }

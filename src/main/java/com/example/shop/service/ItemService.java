@@ -204,6 +204,10 @@ public class ItemService {
         return itemRepository.findByIdForUpdateStock(itemId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 상품입니다."));
     }
 
+    public List<Item> getItemListForUpdateStock(List<Long> itemIdList) {
+        return itemRepository.findItemListForUpdateStock(itemIdList);
+    }
+
     /**
      * 서버에 저장할 때 사용할 파일이름을 뽑아내는 함수
      * @param originalFilename 업로드 될 때의 파일 이름
