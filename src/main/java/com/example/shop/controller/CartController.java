@@ -48,9 +48,9 @@ public class CartController {
         List<CartDto> cartList = cartService.getCartList(username);
         Member findMember = memberService.getMemberByUsername(username);
 
-        int orderTotalPrice = 0;
+        long orderTotalPrice = 0;
         for (CartDto cartDto : cartList) {
-            orderTotalPrice += cartDto.getPrice() * cartDto.getCount();
+            orderTotalPrice += (long) cartDto.getPrice() * (long) cartDto.getCount();
         }
 
         model.addAttribute("cartItems", cartList);
@@ -155,7 +155,7 @@ public class CartController {
         long totalPrice = 0;
         List<CartItem> cartItemList = cartItemRepository.findCartItemListWithItemById(cartItemIdList);
         for (CartItem cartItem : cartItemList) {
-            totalPrice += (long) cartItem.getItem().getPrice() * cartItem.getCount();
+            totalPrice += (long) cartItem.getItem().getPrice() * (long) cartItem.getCount();
         }
         return totalPrice;
     }

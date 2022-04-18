@@ -19,7 +19,7 @@ public class OrderHistDto {
 
     private OrderStatus orderStatus;
 
-    private int totalPrice = 0;
+    private long totalPrice = 0;
 
     private String merchantUid;
 

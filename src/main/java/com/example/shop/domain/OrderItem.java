@@ -29,7 +29,7 @@ public class OrderItem extends DateBaseEntity {
 
     private int itemPrice;
 
-    private int totalPrice;
+    private long totalPrice;
 
     private int count;
 

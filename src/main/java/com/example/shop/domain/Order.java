@@ -78,8 +78,8 @@ public class Order extends DateBaseEntity {
      * 총 결제 금액 계산을 위한 메서드
      * @return 총 결제 금액
      */
-    public int getTotalPrice() {
-        int totalPrice = 0;
+    public long getTotalPrice() {
+        long totalPrice = 0;
 
         for (OrderItem orderItem : orderItems) {
             totalPrice += orderItem.getTotalPrice();

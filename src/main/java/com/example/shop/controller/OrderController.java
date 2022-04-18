@@ -51,7 +51,7 @@ public class OrderController {
         }
 
         Item item = itemService.getItem(orderDto.getItemId());
-        long totalPrice = (long) item.getPrice() * orderDto.getCount();
+        long totalPrice = (long) item.getPrice() * (long) orderDto.getCount();
 
         try {
             String msg = paymentService.validatePayment(orderDto.getImpUid(), totalPrice);
