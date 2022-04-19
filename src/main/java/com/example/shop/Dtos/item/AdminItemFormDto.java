@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AdminItemFormDto extends UserItemFormDto {
+public class AdminItemFormDto extends ItemFormDto {
     private LocalDateTime createdDate;
 
     private LocalDateTime lastModifiedDate;

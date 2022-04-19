@@ -18,55 +18,14 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserItemFormDto {
-
-    private Long id;
-
-    @NotBlank
-    private String itemName;
-
-    @NotNull
-    @Min(0)
-    private Integer price;
-
-    @NotBlank
-    private String itemDetails;
-
-    @NotNull
-    @Min(0)
-    private Integer stockQuantity;
-
-    @NotNull
-    private ItemStatus status;
-
-    @NotNull
-    private ItemCategory category;
-
-    private ItemImgDto itemRepImgDto;
-
-    private List<ItemImgDto> itemImgDtoList = new ArrayList<>();
-
-    private List<MultipartFile> itemImgs = new ArrayList<>();
-
-    private MultipartFile itemRepImg;
+public class UserItemFormDto extends ItemFormDto {
 
     public UserItemFormDto(String itemName, Integer price, String itemDetails, Integer stockQuantity, ItemStatus status, ItemCategory category) {
-        this.itemName = itemName;
-        this.price = price;
-        this.itemDetails = itemDetails;
-        this.stockQuantity = stockQuantity;
-        this.status = status;
-        this.category = category;
+        super(itemName, price, itemDetails, stockQuantity, status, category);
     }
 
     public UserItemFormDto(Long id, String itemName, Integer price, String itemDetails, Integer stockQuantity, ItemStatus status, ItemCategory category) {
-        this.id = id;
-        this.itemName = itemName;
-        this.price = price;
-        this.itemDetails = itemDetails;
-        this.stockQuantity = stockQuantity;
-        this.status = status;
-        this.category = category;
+        super(id, itemName, price, itemDetails, stockQuantity, status, category);
     }
 
     /**
@@ -87,15 +46,5 @@ public class UserItemFormDto {
         List<ItemImg> itemImgList = item.getItemImgList();
         classifyRepImg(itemFormDto, itemImgList);
         return itemFormDto;
-    }
-
-    protected static void classifyRepImg(UserItemFormDto itemFormDto, List<ItemImg> itemImgList) {
-        for (ItemImg itemImg : itemImgList) {
-            if (itemImg.isRepImg()) {
-                itemFormDto.setItemRepImgDto(ItemImgDto.of(itemImg));
-            } else {
-                itemFormDto.getItemImgDtoList().add(ItemImgDto.of(itemImg));
-            }
-        }
     }
 }
