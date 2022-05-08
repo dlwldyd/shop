@@ -29,6 +29,6 @@ logging:
     org.hibernate.SQL: debug
 
 
-itemImgLocation: C:/shop
+itemImgLocation: /home/dlwldyd/ShopImg
 
-uploadPath: file:///C:/shop/
+uploadPath: file:/home/dlwldyd/ShopImg/

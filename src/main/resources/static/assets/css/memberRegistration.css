@@ -1,0 +1,7 @@
+.field-error {
+    border-color: #dc3545 !important;
+    color: #dc3545 !important;
+}
+#top {
+    margin-top: 20px;
+}

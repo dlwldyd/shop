@@ -27,7 +27,6 @@
 
 > 로그인 페이지 입니다.<br>
 > 아이디와 비밀번호를 이용해 로그인이 가능합니다.<br>
-> __ADMIN ID__ : admin, __PASSWORD__ : admin   
 ### 상품 등록
 <img src="./screenshot/상품등록.png">
 

@@ -1,0 +1,9 @@
+.margin-bottom{
+    margin-bottom: 100px;
+}
+#payment-amount{
+    float: left;
+}
+.order-cancel{
+    float: right;
+}

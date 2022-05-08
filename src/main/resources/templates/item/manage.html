@@ -4,58 +4,7 @@
     <meta charset="UTF-8">
     <title>상품 관리</title>
 </head>
-<style>
-.fill-black-section {
-    padding: 50px 0;
-    background-size: cover;
-    background-position: center center;
-    position: relative;
-    z-index: 1;
-    background-attachment: fixed;
-    padding-top: 50px;
-}
-.fill-black {
-    background-image: url(/assets/img/fill-black.jpg);
-}
-.item-bg {
-    height: 200px;
-    background-size: cover;
-    background-position: center;
-    border-radius: 10px;
-    background-color: #ddd;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-}
-img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-.read-more-btn {
-    margin-right: 20px;
-}
-.search-form form p input[type=text], .search-form form p input[type=tel], .search-form form p input[type=email] {
-    width: 49%;
-    height: 40px;
-    padding: 5px;
-    border: 1px solid rgb(180, 180, 180);
-    border-radius: 3px;
-}
-.search-form form p select {
-    margin-right: 5px;
-    width: 20%;
-    height: 40px;
-    border: 1px solid rgb(180, 180, 180);
-    border-radius: 3px;
-}
-button {
-    width: 40px;
-    height: 40px;
-    background-color: white;
-    border: 1px solid rgb(180, 180, 180);
-    border-radius: 3px;
-}
-</style>
+<link rel="stylesheet" href="/assets/css/itemManage.css">
 <body>
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 <div class="fill-black-section fill-black"></div>
@@ -126,40 +75,7 @@ button {
     </div>
 </div>
 <!-- end latest news -->
-<script>
-    function page(page){
-        const itemStatus = document.getElementById("itemStatus").value;
-        const itemCategory = document.getElementById("itemCategory").value;
-        const itemName = document.getElementById("itemName").value;
-
-        location.href = "/item/manage/?page=" + page + "&itemStatus=" + itemStatus + "&itemCategory=" + itemCategory + "&itemName=" + itemName;
-    }
-
-    function deleteItem(itemId){
-
-        const token = $("meta[name='_csrf']").attr("content");
-        const header = $("meta[name='_csrf_header']").attr("content");
-
-        const url = "/item/delete/" + itemId;
-
-        $.ajax({
-            url : url,
-            type : "DELETE",
-            beforeSend : function(xhr){
-                xhr.setRequestHeader(header, token);
-            },
-            dataType : "json",
-            cache : false,
-            success : function(result, status){
-                alert("상품이 삭제되었습니다.");
-                location.href='/item/manage';
-            },
-            error : function(jqXHR, status, error){
-                alert(jqXHR.responseJSON.message);
-            }
-        });
-    }
-</script>
+<script src="/assets/js/itemManage.js"></script>
 <!-- jquery -->
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
 <!-- bootstrap -->

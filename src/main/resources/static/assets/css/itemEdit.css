@@ -1,0 +1,62 @@
+.field-error {
+    border-color: #dc3545 !important;
+    color: #dc3545 !important;
+}
+#top {
+    margin-top: 20px;
+}
+
+.field-error {
+    border-color: #dc3545 !important;
+    color: #dc3545 !important;
+}
+
+.login-form form p select {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+textarea {
+    border: 1px solid #ddd;
+    padding: 15px;
+    height: 200px;
+    border-radius: 3px;
+    width: 100%;
+    resize: none;
+}
+
+.filebox .upload-name {
+    display: inline-block;
+    height: 40px;
+    padding: 0 10px;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+    width: 78%;
+    color: #999999;
+}
+
+.filebox label {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #fff;
+    vertical-align: top;
+    background-color: #025f19;
+    cursor: pointer;
+    height: 40px;
+    margin-left: 10px;
+    border-radius: 3px;
+}
+
+.filebox input[type="file"] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+}
+#register-button {
+    margin-bottom: 20px;
+}
