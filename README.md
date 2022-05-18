@@ -12,6 +12,105 @@
 ## 테이블 구조
 <img src="./table_diagram.png">
 
+## 프로젝트 구조
+```
+./src/main/java/
+└── com/
+    └── example/
+        └── shop/
+            ├── builder/
+            │   ├── ErrorMessageBuilderImpl.java
+            │   └── ErrorMessageBuilder.java
+            ├── configuration/
+            │   └── WebMvcConfig.java
+            ├── controller/
+            │   ├── CartController.java
+            │   ├── HomeController.java
+            │   ├── ItemController.java
+            │   ├── LoginController.java
+            │   ├── MemberController.java
+            │   ├── OrderController.java
+            │   └── ShopController.java
+            ├── domain/
+            │   ├── baseentity/
+            │   │   └── DateBaseEntity.java
+            │   ├── CartItem.java
+            │   ├── Cart.java
+            │   ├── ItemImg.java
+            │   ├── Item.java
+            │   ├── Member.java
+            │   ├── OrderItem.java
+            │   ├── Order.java
+            │   └── PersistentLogins.java
+            ├── Dtos/
+            │   ├── cart/
+            │   │   ├── CartDto.java
+            │   │   ├── CartItemDto.java
+            │   │   └── CartOrderDto.java
+            │   ├── item/
+            │   │   ├── AdminItemFormDto.java
+            │   │   ├── ItemFormDto.java
+            │   │   ├── ItemImgDto.java
+            │   │   ├── ItemSearchDto.java
+            │   │   └── UserItemFormDto.java
+            │   ├── member/
+            │   │   ├── MemberFormDto.java
+            │   │   └── PaymentInfoDto.java
+            │   └── order/
+            │       ├── OrderDto.java
+            │       ├── OrderHistDto.java
+            │       └── OrderItemDto.java
+            ├── enumtype/
+            │   ├── DeliveryStatus.java
+            │   ├── ItemCategory.java
+            │   ├── ItemStatus.java
+            │   ├── OrderStatus.java
+            │   └── Role.java
+            ├── exception/
+            │   ├── DeletedItemException.java
+            │   ├── OutOfStockException.java
+            │   ├── PaymentFailException.java
+            │   ├── RefundFailException.java
+            │   └── SoldOutException.java
+            ├── init/
+            │   ├── InitAdmin.java
+            │   └── initItem.java
+            ├── repository/
+            │   ├── cart/
+            │   │   ├── CartItemRepository.java
+            │   │   └── CartRepository.java
+            │   ├── item/
+            │   │   ├── ItemRepositoryCustomImpl.java
+            │   │   ├── ItemRepositoryCustom.java
+            │   │   └── ItemRepository.java
+            │   ├── itemimg/
+            │   │   └── ItemImgRepository.java
+            │   ├── member/
+            │   │   └── MemberRepository.java
+            │   └── order/
+            │       └── OrderRepository.java
+            ├── security/
+            │   ├── configuration/
+            │   │   └── SecurityConfig.java
+            │   ├── handler/
+            │   │   ├── CustomAuthenticationFailureHandler.java
+            │   │   └── CustomAuthenticationSuccessHandler.java
+            │   └── member/
+            │       └── MemberContext.java
+            ├── service/
+            │   ├── CartService.java
+            │   ├── CustomUserDetailsService.java
+            │   ├── FileService.java
+            │   ├── ItemImgService.java
+            │   ├── ItemService.java
+            │   ├── MemberService.java
+            │   ├── OrderService.java
+            │   └── payment/
+            │       ├── IamportService.java
+            │       └── PaymentService.java
+            └── ShopApplication.java
+```
+
 ## 주요 기능
 ### 홈 화면
 <img src="./screenshot/홈화면.png">
